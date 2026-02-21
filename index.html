@@ -13,9 +13,9 @@
       --muted:#b7b7b7;
       --line:#2a2a2a;
 
-      --accent:#f2f2f2;   /* mono accent */
-      --accent2:#d9d9d9;  /* secondary mono accent */
-      --danger:#e6e6e6;   /* keep mono */
+      --accent:#f2f2f2;
+      --accent2:#d9d9d9;
+      --danger:#e6e6e6;
     }
 
     *{box-sizing:border-box}
@@ -202,25 +202,22 @@
 
         <div style="display:grid;gap:10px">
           <div>
-            <div class="muted" style="margin-bottom:6px">Nama</div>
-            <input id="custName" type="text" placeholder="Contoh: Dini" />
+            <div class="muted" style="margin-bottom:6px">Nama / Inisial</div>
+            <input id="custName" type="text" placeholder="Contoh: Dini / DJ" />
           </div>
           <div>
-            <div class="muted" style="margin-bottom:6px">Username Heartopia</div>
-            <input id="custUser" type="text" placeholder="Contoh: @username" />
+            <div class="muted" style="margin-bottom:6px">Username Telegram</div>
+            <input id="custUser" type="text" placeholder="Contoh: @username (wajib)" />
           </div>
           <div>
-            <div class="muted" style="margin-bottom:6px">Catatan (opsional)</div>
+            <div class="muted" style="margin-bottom:6px">Catatan (wajib)</div>
             <textarea id="custNote" placeholder="Contoh: Tolong fokus blueberry dulu, lalu rasberry."></textarea>
           </div>
 
-          <button class="btn btn-primary" id="sendWA">Kirim ke WhatsApp</button>
+          <button class="btn btn-primary" id="sendTG">Kirim ke Telegram</button>
           <button class="btn btn-danger" id="clearCart">Kosongkan Keranjang</button>
 
-          <div class="foot">
-            <div><strong>Ubah nomor WhatsApp:</strong> edit <span class="mono">WA_NUMBER</span> pada script.</div>
-            <div>Format WA: kode negara tanpa “+”. Contoh: <span class="mono">6281234567890</span></div>
-          </div>
+          <div id="ticketBox" class="ok" style="display:none;"></div>
         </div>
       </div>
     </aside>
@@ -229,10 +226,16 @@
 </main>
 
 <script>
-  const WA_NUMBER = "6283197962700";
+  // ==============================
+  // TELEGRAM CONFIG
+  // ==============================
+  const BOT_TOKEN = "8289857502:AAFelp66rhaB4MXBxKQAPnqafhbiK-EwDjE";
+  const CHAT_ID = "-1003862510166";
+
   const BRAND = "WEALTHOPIA";
   const MIN_TOTAL_QTY = 100;
 
+  // Harga satuan per 1 item
   const CATALOG = {
     Fruits: [
       { id:"blueberry", label:"🫐 Blueberry", unit:30 },
@@ -249,10 +252,17 @@
     ],
   };
 
+  // ==============================
+  // STATE
+  // ==============================
+  /** cart: { [id]: {id,label,unit,qty} } */
   const cart = {};
   let activeTab = Object.keys(CATALOG)[0];
   let selectedItem = null;
 
+  // ==============================
+  // HELPERS
+  // ==============================
   const rupiah = (n) => "Rp" + Math.round(n).toLocaleString("id-ID");
 
   function parseQty(v){
@@ -261,6 +271,29 @@
     return Math.floor(n);
   }
 
+  function normalizeTGUsername(v){
+    const raw = String(v || "").trim();
+    if (!raw) return "";
+    return raw.startsWith("@") ? raw.slice(1) : raw;
+  }
+
+  function yyyymmdd(){
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth()+1).padStart(2,"0");
+    const d = String(now.getDate()).padStart(2,"0");
+    return `${y}${m}${d}`;
+  }
+
+  function generateTicket(usernameTG){
+    const u = normalizeTGUsername(usernameTG);
+    const random3 = Math.floor(100 + Math.random() * 900);
+    return `${u}${random3}WTP${yyyymmdd()}`;
+  }
+
+  // ==============================
+  // UI ELEMENTS
+  // ==============================
   const tabsEl = document.getElementById("tabs");
   const itemsEl = document.getElementById("items");
 
@@ -278,7 +311,13 @@
   const totalPriceEl = document.getElementById("totalPrice");
   const ruleBox = document.getElementById("ruleBox");
   const okBox = document.getElementById("okBox");
+  const ticketBox = document.getElementById("ticketBox");
 
+  const sendBtn = document.getElementById("sendTG");
+
+  // ==============================
+  // RENDER
+  // ==============================
   function renderTabs(){
     tabsEl.innerHTML = "";
     Object.keys(CATALOG).forEach((cat)=>{
@@ -402,6 +441,9 @@
     recalcTotalsUI();
   }
 
+  // ==============================
+  // CART OPS
+  // ==============================
   function addToCart(item, qty){
     if (!cart[item.id]){
       cart[item.id] = { ...item, qty };
@@ -440,6 +482,20 @@
     return { ok:true, msg:"OK" };
   }
 
+  function validateFields(){
+    const name = document.getElementById("custName").value.trim();
+    const userRaw = document.getElementById("custUser").value.trim();
+    const note = document.getElementById("custNote").value.trim();
+
+    if (!name) return { ok:false, msg:"Nama / Inisial wajib diisi." };
+    if (!userRaw) return { ok:false, msg:"Username Telegram wajib diisi." };
+    const user = normalizeTGUsername(userRaw);
+    if (!user) return { ok:false, msg:"Username Telegram wajib diisi." };
+    if (!note) return { ok:false, msg:"Catatan wajib diisi." };
+
+    return { ok:true, name, user, note };
+  }
+
   function recalcTotalsUI(){
     const { totalQty, totalPrice } = getTotals();
     totalQtyEl.textContent = totalQty.toLocaleString("id-ID");
@@ -456,7 +512,7 @@
     } else {
       ruleBox.style.display = "none";
       okBox.style.display = "block";
-      okBox.textContent = "Siap dikirim. Klik “Kirim ke WhatsApp”.";
+      okBox.textContent = "Siap dikirim. Klik “Kirim ke Telegram”.";
     }
   }
 
@@ -464,27 +520,39 @@
     renderCart();
   }
 
-  function buildWA(){
-    const v = validateRules();
-    if (!v.ok){
-      alert(v.msg);
+  // ==============================
+  // TELEGRAM SEND
+  // ==============================
+  async function sendTelegram(){
+    ticketBox.style.display = "none";
+    ticketBox.textContent = "";
+
+    const r = validateRules();
+    if (!r.ok){
+      alert(r.msg);
       return;
     }
 
-    const name = document.getElementById("custName").value.trim();
-    const user = document.getElementById("custUser").value.trim();
-    const note = document.getElementById("custNote").value.trim();
+    const f = validateFields();
+    if (!f.ok){
+      alert(f.msg);
+      return;
+    }
 
+    const ticket = generateTicket(f.user);
     const { totalQty, totalPrice } = getTotals();
+
     const lines = Object.values(cart).map(it => {
       const sub = it.qty * it.unit;
       return `- ${it.label} | Qty ${it.qty} | ${rupiah(sub)}`;
     });
 
     const msg =
-`${BRAND} — ORDER FARMING
-Nama: ${name || "-"}
-Username Heartopia: ${user || "-"}
+`📦 ${BRAND} — ORDER
+
+🎟 Ticket: ${ticket}
+Nama / Inisial: ${f.name}
+Username Telegram: @${f.user}
 
 Detail Order:
 ${lines.join("\n")}
@@ -493,14 +561,47 @@ Total Qty: ${totalQty.toLocaleString("id-ID")}
 Total Harga: ${rupiah(totalPrice)}
 
 Catatan:
-${note || "-"}
+${f.note}`;
 
-Mohon konfirmasi antrian & estimasi pengerjaan.`;
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-    window.open(url, "_blank");
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Mengirim...";
+
+    try{
+      const res = await fetch(url,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: msg
+        })
+      });
+
+      const data = await res.json();
+
+      if (!data || !data.ok){
+        alert("Gagal kirim ke Telegram.");
+        return;
+      }
+
+      ticketBox.style.display = "block";
+      ticketBox.innerHTML = `Berhasil dikirim. Kode tiket: <span class="mono">${ticket}</span>`;
+
+      clearCart();
+      hideSelector();
+
+    } catch(e){
+      alert("Terjadi kesalahan saat mengirim.");
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Kirim ke Telegram";
+    }
   }
 
+  // ==============================
+  // EVENTS
+  // ==============================
   selCloseBtn.addEventListener("click", hideSelector);
 
   selAddBtn.addEventListener("click", ()=>{
@@ -517,9 +618,12 @@ Mohon konfirmasi antrian & estimasi pengerjaan.`;
     selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa tambah item lain lagi.";
   });
 
-  document.getElementById("sendWA").addEventListener("click", buildWA);
+  document.getElementById("sendTG").addEventListener("click", sendTelegram);
   document.getElementById("clearCart").addEventListener("click", clearCart);
 
+  // ==============================
+  // INIT
+  // ==============================
   renderTabs();
   renderItems();
   renderCart();

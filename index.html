@@ -230,6 +230,30 @@
     }
     .modal-accept strong{font-weight:900}
     .modal-accept .desc{color:var(--muted);font-size:12px;margin-top:2px}
+
+    /* FIX: rapihin layout item di keranjang (jaga kolom kanan tidak melebar) */
+.cart-item{
+  grid-template-columns: 1fr 160px; /* kolom kanan fixed */
+  align-items: start;
+}
+
+.cart-item .right{
+  justify-content: flex-end;
+}
+
+.cart-item .right input[type="number"]{
+  width: 72px;        /* lebar input qty */
+  max-width: 72px;
+  padding: 10px 10px; /* biar tetap enak */
+}
+
+/* biar teks kiri nggak “maksa” melebar aneh */
+.cart-item .meta{
+  min-width: 0;
+}
+.cart-item .meta .small{
+  word-break: break-word;
+}
   </style>
 </head>
 

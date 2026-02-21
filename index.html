@@ -6,21 +6,21 @@
   <title>WEALTHOPIA — Order Form</title>
   <style>
     :root{
-      --bg:#0a0a0a;
-      --card:#121212;
-      --soft:#0f0f0f;
-      --text:#f2f2f2;
-      --muted:#b7b7b7;
-      --line:#2a2a2a;
+      --bg:#ffffff;
+      --card:#f6f6f6;
+      --soft:#ffffff;
+      --text:#111111;
+      --muted:#666666;
+      --line:#e5e5e5;
 
-      --accent:#f2f2f2;
-      --accent2:#d9d9d9;
-      --danger:#e6e6e6;
+      --accent:#111111;
+      --accent2:#333333;
+      --danger:#111111;
     }
 
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    header{padding:22px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(10,10,10,.92);backdrop-filter: blur(6px);z-index:10}
+    header{padding:22px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter: blur(6px);z-index:10}
     .wrap{max-width:1100px;margin:0 auto}
     h1{margin:0;font-size:22px;letter-spacing:.5px}
     .sub{color:var(--muted);margin-top:6px;font-size:13px;line-height:1.45}
@@ -34,7 +34,7 @@
     .panel-b{padding:14px}
     .tabs{display:flex;gap:8px;flex-wrap:wrap}
     .tab{border:1px solid var(--line);background:transparent;color:var(--text);padding:8px 10px;border-radius:999px;cursor:pointer;font-size:12px}
-    .tab[aria-selected="true"]{border-color:rgba(242,242,242,.65);box-shadow:0 0 0 2px rgba(242,242,242,.12) inset}
+    .tab[aria-selected="true"]{border-color:rgba(17,17,17,.6);box-shadow:0 0 0 2px rgba(17,17,17,.10) inset}
     .items{margin-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     @media (max-width: 560px){.items{grid-template-columns:1fr}}
     .itembtn{
@@ -51,7 +51,7 @@
       gap:10px;
       transition:transform .05s ease, border-color .15s ease, background .15s ease;
     }
-    .itembtn:hover{border-color:rgba(217,217,217,.7)}
+    .itembtn:hover{border-color:rgba(17,17,17,.35)}
     .itembtn:active{transform:scale(.99)}
     .iname{font-weight:900}
     .iprice{white-space:nowrap;text-align:right}
@@ -62,7 +62,7 @@
     .selector{
       margin-top:12px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
+      background:rgba(17,17,17,.03);
       border-radius:14px;
       padding:12px;
       display:none;
@@ -72,6 +72,7 @@
     .sel-title{font-weight:900}
     .sel-sub{color:var(--muted);font-size:12px;margin-top:4px}
     .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
     input[type="number"], input[type="text"], textarea{
       width:100%;background:var(--soft);border:1px solid var(--line);color:var(--text);
       padding:10px 10px;border-radius:12px;outline:none
@@ -89,15 +90,15 @@
       font-weight:900
     }
     .btn-primary{
-      background:rgba(255,255,255,.08);
-      border-color:rgba(255,255,255,.5)
+      background:rgba(17,17,17,.06);
+      border-color:rgba(17,17,17,.35)
     }
-    .btn-primary:hover{background:rgba(255,255,255,.12)}
+    .btn-primary:hover{background:rgba(17,17,17,.10)}
     .btn-danger{
-      background:rgba(255,255,255,.06);
-      border-color:rgba(255,255,255,.35)
+      background:rgba(17,17,17,.04);
+      border-color:rgba(17,17,17,.25)
     }
-    .btn-danger:hover{background:rgba(255,255,255,.1)}
+    .btn-danger:hover{background:rgba(17,17,17,.07)}
     .btn-ghost{background:transparent}
 
     .cart{display:flex;flex-direction:column;gap:10px}
@@ -112,22 +113,124 @@
     .warn{
       padding:10px 12px;
       border-radius:12px;
-      border:1px dashed rgba(255,255,255,.45);
-      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(17,17,17,.35);
+      background:rgba(17,17,17,.04);
       color:var(--text);
       font-size:12px
     }
     .ok{
       padding:10px 12px;
       border-radius:12px;
-      border:1px dashed rgba(255,255,255,.55);
-      background:rgba(255,255,255,.08);
+      border:1px dashed rgba(17,17,17,.35);
+      background:rgba(17,17,17,.04);
       color:var(--text);
       font-size:12px
     }
-    .foot{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5}
+
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
     hr{border:none;border-top:1px solid var(--line);margin:14px 0}
+
+    .tlink{
+      font-weight:900;
+      text-decoration:underline;
+      cursor:pointer;
+    }
+
+    /* Ticket center area */
+    .ticket-area{
+      display:none;
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:rgba(17,17,17,.03);
+      padding:14px;
+      text-align:center;
+    }
+    .ticket-code{
+      margin-top:8px;
+      font-weight:900;
+      font-size:16px;
+    }
+    .ticket-template{
+      margin-top:10px;
+      text-align:left;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      background:var(--soft);
+      white-space:pre-wrap;
+    }
+    .ticket-actions{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:9999;
+    }
+    .modal-card{
+      width:min(860px, 100%);
+      background:var(--soft);
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      position:relative;
+    }
+    .modal-close{
+      position:absolute;
+      top:10px;
+      right:10px;
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(17,17,17,.06);
+      cursor:pointer;
+      font-weight:900;
+    }
+    .modal-body{
+      padding:12px;
+      display:grid;
+      gap:12px;
+    }
+    .modal-img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:12px;
+      border:1px solid var(--line);
+    }
+    .modal-accept{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      background:rgba(17,17,17,.03);
+      cursor:pointer;
+      user-select:none;
+    }
+    .check{
+      width:22px;height:22px;border-radius:7px;
+      border:1px solid var(--line);
+      display:grid;place-items:center;
+      background:var(--soft);
+      font-weight:900;
+    }
+    .modal-accept strong{font-weight:900}
+    .modal-accept .desc{color:var(--muted);font-size:12px;margin-top:2px}
   </style>
 </head>
 
@@ -167,17 +270,16 @@
           <div class="row">
             <div style="min-width:160px">
               <div class="muted" style="margin-bottom:6px">Qty</div>
-              <input id="selQty" type="number" min="1" step="1" value="100" />
+              <input id="selQty" type="number" min="0" step="5" value="0" />
             </div>
 
-            <button class="btn btn-primary" id="selAdd">Tambah ke Keranjang</button>
+            <button class="btn" id="minus5" type="button">-5</button>
+            <button class="btn" id="plus5" type="button">+5</button>
+
+            <button class="btn btn-primary" id="selAdd" type="button">Tambah ke Keranjang</button>
           </div>
 
-          <div class="muted" id="selHint">Masukkan jumlah yang ingin dibeli.</div>
-        </div>
-
-        <div class="foot">
-          <div><strong>Harga acuan:</strong> sesuai list unit (contoh blueberry Rp30/item).</div>
+          <div class="muted" id="selHint">Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.</div>
         </div>
       </div>
     </section>
@@ -187,15 +289,21 @@
         <h2>Keranjang & Checkout</h2>
         <div class="pill" id="cartCount">0 jenis</div>
       </div>
+
       <div class="panel-b">
         <div class="cart" id="cart"></div>
+
+        <button class="btn btn-danger" id="clearCart" type="button" style="margin-top:8px;display:none;">Kosongkan Keranjang</button>
 
         <div class="totalbox">
           <div class="kv"><span>Total Qty</span><strong id="totalQty">0</strong></div>
           <div class="kv"><span>Total Harga</span><strong id="totalPrice">Rp0</strong></div>
 
           <div id="ruleBox" class="warn" style="display:none;"></div>
-          <div id="okBox" class="ok" style="display:none;"></div>
+
+          <div id="okBox" class="ok" style="display:none;">
+            Untuk membeli produk ini, kamu perlu menyetujui <span class="tlink" id="openTnc"><strong>Syarat dan Ketentuan</strong></span> yang kami berikan.
+          </div>
         </div>
 
         <hr>
@@ -214,17 +322,43 @@
             <textarea id="custNote" placeholder="Contoh: Tolong fokus blueberry dulu, lalu rasberry."></textarea>
           </div>
 
-          <button class="btn btn-primary" id="sendTG">Kirim ke Telegram</button>
-          <button class="btn btn-danger" id="clearCart">Kosongkan Keranjang</button>
+          <button class="btn btn-primary" id="sendTG" type="button">Order Sekarang</button>
 
-          <div id="ticketBox" class="ok" style="display:none;"></div>
-          <button class="btn btn-primary" id="copyTicket" style="display:none;">Salin Tiket</button>
+          <div class="ticket-area" id="ticketArea">
+            <div style="font-weight:900">Berhasil dikirim.</div>
+            <div class="ticket-code mono" id="ticketCode"></div>
+
+            <div class="muted" style="margin-top:10px;margin-bottom:6px">Template (auto-salin):</div>
+            <div class="ticket-template mono" id="ticketTemplate"></div>
+
+            <div class="ticket-actions">
+              <button class="btn btn-primary" id="copyTicket" type="button">Salin Tiket</button>
+              <a class="btn" id="openBot" href="https://t.me/wealthopiabot" target="_blank" rel="noopener">Buka Bot</a>
+            </div>
+          </div>
         </div>
       </div>
     </aside>
 
   </div>
 </main>
+
+<!-- TNC MODAL -->
+<div class="modal" id="tncModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Syarat dan Ketentuan">
+    <button class="modal-close" id="tncClose" type="button" title="Tutup">✕</button>
+    <div class="modal-body">
+      <img class="modal-img" alt="Syarat dan Ketentuan" src="https://keeptnc.carrd.co/assets/images/gallery01/d292c96a_original.jpg?v=290756c8" />
+      <div class="modal-accept" id="tncAccept" role="button" tabindex="0">
+        <div class="check" id="tncCheck"> </div>
+        <div>
+          <strong>Saya sudah membaca dan memahami syarat dan ketentuan</strong>
+          <div class="desc">Klik untuk menyetujui dan menutup pop-up.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   const BOT_TOKEN = "8289857502:AAFelp66rhaB4MXBxKQAPnqafhbiK-EwDjE";
@@ -241,7 +375,6 @@
       { id:"mandarin",  label:"🍊 Mandarin",  unit:40 },
     ],
     Mushrooms: [
-      { id:"mushroom",  label:"🍄 Mushroom",  unit:25 },
       { id:"oyster",    label:"🍄 Oyster",    unit:25 },
       { id:"shiitake",  label:"🍄 Shiitake",  unit:25 },
       { id:"button",    label:"🍄 Button",    unit:25 },
@@ -257,12 +390,21 @@
   let activeTab = Object.keys(CATALOG)[0];
   let selectedItem = null;
 
+  let tncAccepted = false;
+  let lastTicket = "";
+
   const rupiah = (n) => "Rp" + Math.round(n).toLocaleString("id-ID");
 
   function parseQty(v){
     const n = Number(v);
     if (!Number.isFinite(n)) return 0;
     return Math.floor(n);
+  }
+
+  function normalizeToStep(n, step){
+    const x = Number(n);
+    if (!Number.isFinite(x)) return 0;
+    return Math.round(x / step) * step;
   }
 
   function normalizeTGUsername(v){
@@ -299,6 +441,8 @@
   const selHintEl  = document.getElementById("selHint");
   const selAddBtn  = document.getElementById("selAdd");
   const selCloseBtn= document.getElementById("selClose");
+  const minus5Btn  = document.getElementById("minus5");
+  const plus5Btn   = document.getElementById("plus5");
 
   const cartEl  = document.getElementById("cart");
   const cartCountEl = document.getElementById("cartCount");
@@ -306,12 +450,20 @@
   const totalPriceEl = document.getElementById("totalPrice");
   const ruleBox = document.getElementById("ruleBox");
   const okBox = document.getElementById("okBox");
+  const clearBtn = document.getElementById("clearCart");
 
-  const ticketBox = document.getElementById("ticketBox");
-  const copyBtn = document.getElementById("copyTicket");
   const sendBtn = document.getElementById("sendTG");
 
-  let lastTicket = "";
+  const ticketArea = document.getElementById("ticketArea");
+  const ticketCodeEl = document.getElementById("ticketCode");
+  const ticketTemplateEl = document.getElementById("ticketTemplate");
+  const copyBtn = document.getElementById("copyTicket");
+
+  const tncModal = document.getElementById("tncModal");
+  const tncClose = document.getElementById("tncClose");
+  const tncAccept = document.getElementById("tncAccept");
+  const tncCheck = document.getElementById("tncCheck");
+  const openTnc = document.getElementById("openTnc");
 
   function renderTabs(){
     tabsEl.innerHTML = "";
@@ -319,6 +471,7 @@
       const b = document.createElement("button");
       b.className = "tab";
       b.textContent = cat;
+      b.type = "button";
       b.setAttribute("aria-selected", String(cat===activeTab));
       b.addEventListener("click", ()=>{
         activeTab = cat;
@@ -362,8 +515,8 @@
     selectedItem = item;
     selTitleEl.textContent = item.label;
     selSubEl.textContent = `${rupiah(item.unit)}/item • ${rupiah(item.unit*100)}/100`;
-    selQtyEl.value = 100;
-    selHintEl.textContent = "Masukkan jumlah yang ingin dibeli, lalu klik “Tambah ke Keranjang”.";
+    selQtyEl.value = 0;
+    selHintEl.textContent = "Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.";
     selectorEl.style.display = "grid";
     selectorEl.scrollIntoView({ behavior:"smooth", block:"nearest" });
   }
@@ -382,7 +535,9 @@
       empty.className = "muted";
       empty.textContent = "Keranjang masih kosong. Pilih item dari sebelah kiri.";
       cartEl.appendChild(empty);
+      clearBtn.style.display = "none";
     } else {
+      clearBtn.style.display = "block";
       entries.forEach((it)=>{
         const box = document.createElement("div");
         box.className = "cart-item";
@@ -401,23 +556,29 @@
 
         const qtyInput = document.createElement("input");
         qtyInput.type = "number";
-        qtyInput.min = 1;
-        qtyInput.step = 1;
+        qtyInput.min = 0;
+        qtyInput.step = 5;
         qtyInput.value = it.qty;
 
         qtyInput.addEventListener("change", ()=>{
-          const q = parseQty(qtyInput.value);
-          if (q < 1){
-            alert("Qty minimal 1.");
-            qtyInput.value = it.qty;
+          let q = parseQty(qtyInput.value);
+          q = normalizeToStep(q, 5);
+          if (q < 0) q = 0;
+
+          if (q === 0){
+            delete cart[it.id];
+            recalc();
             return;
           }
+
           cart[it.id].qty = q;
+          qtyInput.value = q;
           recalc();
         });
 
         const remove = document.createElement("button");
         remove.className = "btn btn-danger";
+        remove.type = "button";
         remove.textContent = "Hapus";
         remove.addEventListener("click", ()=>{
           delete cart[it.id];
@@ -447,10 +608,6 @@
 
   function clearCart(){
     Object.keys(cart).forEach(k => delete cart[k]);
-    lastTicket = "";
-    ticketBox.style.display = "none";
-    ticketBox.textContent = "";
-    copyBtn.style.display = "none";
     recalc();
   }
 
@@ -488,6 +645,7 @@
     const user = normalizeTGUsername(userRaw);
     if (!user) return { ok:false, msg:"Username Telegram wajib diisi." };
     if (!note) return { ok:false, msg:"Catatan wajib diisi." };
+    if (!tncAccepted) return { ok:false, msg:"Kamu harus menyetujui Syarat dan Ketentuan." };
 
     return { ok:true, name, user, note };
   }
@@ -508,7 +666,9 @@
     } else {
       ruleBox.style.display = "none";
       okBox.style.display = "block";
-      okBox.textContent = "Siap dikirim. Klik “Kirim ke Telegram”.";
+      okBox.innerHTML = `Untuk membeli produk ini, kamu perlu menyetujui <span class="tlink" id="openTncInline"><strong>Syarat dan Ketentuan</strong></span> yang kami berikan.`;
+      const inline = document.getElementById("openTncInline");
+      if (inline) inline.addEventListener("click", openTncModal);
     }
   }
 
@@ -534,10 +694,18 @@
     }
   }
 
+  function openTncModal(){
+    tncModal.style.display = "flex";
+    tncModal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeTncModal(){
+    tncModal.style.display = "none";
+    tncModal.setAttribute("aria-hidden", "true");
+  }
+
   async function sendTelegram(){
-    ticketBox.style.display = "none";
-    ticketBox.textContent = "";
-    copyBtn.style.display = "none";
+    ticketArea.style.display = "none";
     lastTicket = "";
 
     const r = validateRules();
@@ -601,48 +769,84 @@ ${f.note}`;
       lastTicket = ticket;
 
       const template = ticketTemplate(ticket);
-      ticketBox.style.display = "block";
-      ticketBox.innerHTML = `
-        Berhasil dikirim. Kode tiket:
-        <div class="mono" style="margin-top:6px">${ticket}</div>
-        <div class="muted" style="margin-top:10px;margin-bottom:6px">Template (auto-salin):</div>
-        <div class="mono" style="white-space:pre-wrap">${template}</div>
-      `;
+      ticketCodeEl.textContent = ticket;
+      ticketTemplateEl.textContent = template;
+      ticketArea.style.display = "block";
 
       await copyText(template);
 
-      copyBtn.style.display = "block";
-      copyBtn.textContent = "Salin Tiket";
-
       clearCart();
       hideSelector();
+
+      ticketArea.scrollIntoView({ behavior:"smooth", block:"center" });
 
     } catch(e){
       alert("Terjadi kesalahan saat mengirim.");
     } finally {
       sendBtn.disabled = false;
-      sendBtn.textContent = "Kirim ke Telegram";
+      sendBtn.textContent = "Order Sekarang";
     }
   }
 
   selCloseBtn.addEventListener("click", hideSelector);
 
+  minus5Btn.addEventListener("click", ()=>{
+    let q = parseQty(selQtyEl.value);
+    q = normalizeToStep(q, 5);
+    q = Math.max(0, q - 5);
+    selQtyEl.value = q;
+  });
+
+  plus5Btn.addEventListener("click", ()=>{
+    let q = parseQty(selQtyEl.value);
+    q = normalizeToStep(q, 5);
+    q = Math.max(0, q + 5);
+    selQtyEl.value = q;
+  });
+
+  selQtyEl.addEventListener("change", ()=>{
+    let q = parseQty(selQtyEl.value);
+    q = normalizeToStep(q, 5);
+    if (q < 0) q = 0;
+    selQtyEl.value = q;
+  });
+
   selAddBtn.addEventListener("click", ()=>{
     if (!selectedItem) return;
 
-    const q = parseQty(selQtyEl.value);
+    let q = parseQty(selQtyEl.value);
+    q = normalizeToStep(q, 5);
+
     if (q < 1){
-      alert("Qty minimal 1.");
+      alert("Qty minimal 1 (kelipatan 5).");
       return;
     }
+
     addToCart(selectedItem, q);
 
-    selQtyEl.value = 100;
-    selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa tambah item lain lagi.";
+    selQtyEl.value = 0;
+    selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa pilih item lain lagi.";
   });
 
-  document.getElementById("sendTG").addEventListener("click", sendTelegram);
-  document.getElementById("clearCart").addEventListener("click", clearCart);
+  openTnc.addEventListener("click", openTncModal);
+  tncClose.addEventListener("click", closeTncModal);
+
+  tncAccept.addEventListener("click", ()=>{
+    tncAccepted = true;
+    tncCheck.textContent = "✓";
+    closeTncModal();
+  });
+  tncAccept.addEventListener("keydown", (e)=>{
+    if (e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      tncAccepted = true;
+      tncCheck.textContent = "✓";
+      closeTncModal();
+    }
+  });
+
+  clearBtn.addEventListener("click", clearCart);
+  sendBtn.addEventListener("click", sendTelegram);
 
   copyBtn.addEventListener("click", async ()=>{
     if (!lastTicket) return;

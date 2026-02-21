@@ -8,19 +8,20 @@
     :root{
       --bg:#0b0f14; --card:#111827; --muted:#9ca3af; --text:#e5e7eb;
       --line:#1f2937; --accent:#22c55e; --accent2:#38bdf8; --danger:#ef4444;
+      --soft:#0c1220;
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
     header{padding:22px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(11,15,20,.9);backdrop-filter: blur(6px);z-index:10}
     .wrap{max-width:1100px;margin:0 auto}
     h1{margin:0;font-size:22px;letter-spacing:.5px}
-    .sub{color:var(--muted);margin-top:6px;font-size:13px}
+    .sub{color:var(--muted);margin-top:6px;font-size:13px;line-height:1.45}
     main{padding:18px 16px 40px}
-    .grid{display:grid;grid-template-columns: 1.3fr .9fr;gap:16px}
+    .grid{display:grid;grid-template-columns: 1.25fr .95fr;gap:16px}
     @media (max-width: 940px){.grid{grid-template-columns:1fr}}
     .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
     .panel-h{padding:14px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .panel-h h2{margin:0;font-size:14px;font-weight:700;letter-spacing:.4px}
+    .panel-h h2{margin:0;font-size:14px;font-weight:800;letter-spacing:.4px}
     .pill{font-size:12px;color:var(--muted)}
     .panel-b{padding:14px}
     .tabs{display:flex;gap:8px;flex-wrap:wrap}
@@ -28,30 +29,65 @@
     .tab[aria-selected="true"]{border-color:rgba(34,197,94,.6);box-shadow:0 0 0 2px rgba(34,197,94,.15) inset}
     .items{margin-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     @media (max-width: 560px){.items{grid-template-columns:1fr}}
-    .item{border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
-    .item-top{display:flex;justify-content:space-between;gap:10px}
-    .name{font-weight:700}
-    .price{color:var(--accent2);font-weight:700;font-size:12px;white-space:nowrap}
+    .itembtn{
+      width:100%;
+      border:1px solid var(--line);
+      background:var(--soft);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px;
+      cursor:pointer;
+      text-align:left;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      transition:transform .05s ease, border-color .15s ease, background .15s ease;
+    }
+    .itembtn:hover{border-color:rgba(56,189,248,.55)}
+    .itembtn:active{transform:scale(.99)}
+    .iname{font-weight:900}
+    .iprice{white-space:nowrap;text-align:right}
+    .iprice .u{color:var(--accent2);font-weight:900;font-size:12px}
+    .iprice .h{color:var(--muted);font-size:12px;margin-top:4px}
     .muted{color:var(--muted);font-size:12px}
-    .row{display:flex;gap:8px;align-items:center}
+
+    /* Selector (appears after clicking an item) */
+    .selector{
+      margin-top:12px;
+      border:1px solid var(--line);
+      background:rgba(34,197,94,.06);
+      border-radius:14px;
+      padding:12px;
+      display:none;
+      gap:10px;
+    }
+    .sel-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .sel-title{font-weight:900}
+    .sel-sub{color:var(--muted);font-size:12px;margin-top:4px}
+    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     input[type="number"], input[type="text"], textarea{
-      width:100%;background:#0c1220;border:1px solid var(--line);color:var(--text);
+      width:100%;background:var(--soft);border:1px solid var(--line);color:var(--text);
       padding:10px 10px;border-radius:12px;outline:none
     }
-    input[type="number"]{max-width:140px}
+    input[type="number"]{max-width:160px}
     textarea{min-height:84px;resize:vertical}
+
     .btn{
-      border:1px solid var(--line);background:#0c1220;color:var(--text);
-      padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:700
+      border:1px solid var(--line);background:var(--soft);color:var(--text);
+      padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:900
     }
     .btn-primary{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.55)}
     .btn-primary:hover{background:rgba(34,197,94,.2)}
     .btn-danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.55)}
+    .btn-ghost{background:transparent}
+
+    /* Cart */
     .cart{display:flex;flex-direction:column;gap:10px}
     .cart-item{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
     .cart-item .meta{display:flex;flex-direction:column;gap:4px}
     .cart-item .meta .small{color:var(--muted);font-size:12px}
     .cart-item .right{display:flex;gap:8px;align-items:center}
+
     .totalbox{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:grid;gap:8px}
     .kv{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:13px}
     .kv strong{color:var(--text)}
@@ -59,6 +95,7 @@
     .ok{padding:10px 12px;border-radius:12px;border:1px dashed rgba(34,197,94,.6);background:rgba(34,197,94,.07);color:#bbf7d0;font-size:12px}
     .foot{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    hr{border:none;border-top:1px solid var(--line);margin:14px 0}
   </style>
 </head>
 
@@ -66,7 +103,10 @@
 <header>
   <div class="wrap">
     <h1>WEALTHOPIA — Order Form</h1>
-    <div class="sub">Masukkan item ke keranjang (kelipatan 100). Total minimal 100 item. Klik “Kirim ke WhatsApp” untuk order otomatis.</div>
+    <div class="sub">
+      Pilih item → akan muncul input qty + tombol “Tambah ke Keranjang”.<br>
+      <strong>Minimal total order: 100 item</strong> (tidak wajib kelipatan 100).
+    </div>
   </div>
 </header>
 
@@ -77,13 +117,37 @@
     <section class="panel">
       <div class="panel-h">
         <h2>Pilih Item</h2>
-        <div class="pill">Harga dihitung otomatis</div>
+        <div class="pill">Klik item untuk mulai</div>
       </div>
       <div class="panel-b">
         <div class="tabs" id="tabs"></div>
+
         <div class="items" id="items"></div>
+
+        <!-- Inline selector after click -->
+        <div class="selector" id="selector">
+          <div class="sel-top">
+            <div>
+              <div class="sel-title" id="selTitle">Item</div>
+              <div class="sel-sub" id="selSub">Harga</div>
+            </div>
+            <button class="btn btn-ghost" id="selClose" title="Tutup">✕</button>
+          </div>
+
+          <div class="row">
+            <div style="min-width:160px">
+              <div class="muted" style="margin-bottom:6px">Qty</div>
+              <input id="selQty" type="number" min="1" step="1" value="100" />
+            </div>
+
+            <button class="btn btn-primary" id="selAdd">Tambah ke Keranjang</button>
+          </div>
+
+          <div class="muted" id="selHint">Masukkan jumlah yang ingin dibeli.</div>
+        </div>
+
         <div class="foot">
-          <div><strong>Catatan:</strong> Input <span class="mono">Qty</span> harus kelipatan 100 (100, 200, 300, dst.).</div>
+          <div><strong>Harga acuan:</strong> sesuai list unit (contoh blueberry Rp30/item).</div>
         </div>
       </div>
     </section>
@@ -92,7 +156,7 @@
     <aside class="panel">
       <div class="panel-h">
         <h2>Keranjang & Checkout</h2>
-        <div class="pill" id="cartCount">0 item</div>
+        <div class="pill" id="cartCount">0 jenis</div>
       </div>
       <div class="panel-b">
         <div class="cart" id="cart"></div>
@@ -101,15 +165,11 @@
           <div class="kv"><span>Total Qty</span><strong id="totalQty">0</strong></div>
           <div class="kv"><span>Total Harga</span><strong id="totalPrice">Rp0</strong></div>
 
-          <div id="ruleBox" class="warn" style="display:none;">
-            Total minimal 100 item dan setiap item harus kelipatan 100.
-          </div>
-          <div id="okBox" class="ok" style="display:none;">
-            Siap dikirim. Klik “Kirim ke WhatsApp”.
-          </div>
+          <div id="ruleBox" class="warn" style="display:none;"></div>
+          <div id="okBox" class="ok" style="display:none;"></div>
         </div>
 
-        <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
+        <hr>
 
         <div style="display:grid;gap:10px">
           <div>
@@ -129,8 +189,8 @@
           <button class="btn btn-danger" id="clearCart">Kosongkan Keranjang</button>
 
           <div class="foot">
-            <div><strong>Ubah nomor WhatsApp:</strong> edit variabel <span class="mono">WA_NUMBER</span> di bagian script.</div>
-            <div>Format WA: kode negara tanpa “+”. Contoh Indonesia: <span class="mono">6281234567890</span></div>
+            <div><strong>Ubah nomor WhatsApp:</strong> edit <span class="mono">WA_NUMBER</span> pada script.</div>
+            <div>Format WA: kode negara tanpa “+”. Contoh: <span class="mono">6281234567890</span></div>
           </div>
         </div>
       </div>
@@ -145,8 +205,9 @@
   // ==============================
   const WA_NUMBER = "6283197962700"; // <-- GANTI jadi nomor WA kamu (tanpa +)
   const BRAND = "WEALTHOPIA";
+  const MIN_TOTAL_QTY = 100; // minimal total item seluruh keranjang
 
-  // Harga satuan per 1 item (dari rangkuman kamu)
+  // Harga satuan per 1 item
   const CATALOG = {
     Fruits: [
       { id:"blueberry", label:"🫐 Blueberry", unit:30 },
@@ -156,7 +217,7 @@
     ],
     Mushrooms: [
       { id:"mushroom",  label:"🍄 Mushroom",  unit:25 },
-      // kalau mau tambah jenis lain (oyster/shiitake/button), cukup copy baris ini:
+      // tambah jika perlu:
       // { id:"oyster", label:"🍄 Oyster", unit:25 },
     ],
     Materials: [
@@ -165,32 +226,41 @@
     ],
   };
 
-  const STEP = 100; // kelipatan 100
-
   // ==============================
   // STATE
   // ==============================
   /** cart: { [id]: {id,label,unit,qty} } */
   const cart = {};
+  let activeTab = Object.keys(CATALOG)[0];
+
+  // selector state
+  let selectedItem = null;
 
   // ==============================
   // HELPERS
   // ==============================
   const rupiah = (n) => "Rp" + Math.round(n).toLocaleString("id-ID");
-  const clampQty = (v) => {
-    const num = Number(v);
-    if (!Number.isFinite(num) || num <= 0) return 0;
-    // round down to nearest STEP
-    return Math.floor(num / STEP) * STEP;
-  };
 
-  const getAllItems = () => Object.values(CATALOG).flat();
+  function parseQty(v){
+    const n = Number(v);
+    if (!Number.isFinite(n)) return 0;
+    return Math.floor(n);
+  }
 
   // ==============================
-  // UI RENDER
+  // UI ELEMENTS
   // ==============================
   const tabsEl = document.getElementById("tabs");
   const itemsEl = document.getElementById("items");
+
+  const selectorEl = document.getElementById("selector");
+  const selTitleEl = document.getElementById("selTitle");
+  const selSubEl   = document.getElementById("selSub");
+  const selQtyEl   = document.getElementById("selQty");
+  const selHintEl  = document.getElementById("selHint");
+  const selAddBtn  = document.getElementById("selAdd");
+  const selCloseBtn= document.getElementById("selClose");
+
   const cartEl  = document.getElementById("cart");
   const cartCountEl = document.getElementById("cartCount");
   const totalQtyEl = document.getElementById("totalQty");
@@ -198,8 +268,9 @@
   const ruleBox = document.getElementById("ruleBox");
   const okBox = document.getElementById("okBox");
 
-  let activeTab = Object.keys(CATALOG)[0];
-
+  // ==============================
+  // RENDER
+  // ==============================
   function renderTabs(){
     tabsEl.innerHTML = "";
     Object.keys(CATALOG).forEach((cat)=>{
@@ -211,6 +282,7 @@
         activeTab = cat;
         renderTabs();
         renderItems();
+        hideSelector();
       });
       tabsEl.appendChild(b);
     });
@@ -219,54 +291,46 @@
   function renderItems(){
     const list = CATALOG[activeTab];
     itemsEl.innerHTML = "";
-    list.forEach((it)=>{
-      const card = document.createElement("div");
-      card.className = "item";
 
-      const top = document.createElement("div");
-      top.className = "item-top";
-      top.innerHTML = `
+    list.forEach((it)=>{
+      const btn = document.createElement("button");
+      btn.className = "itembtn";
+      btn.type = "button";
+
+      btn.innerHTML = `
         <div>
-          <div class="name">${it.label}</div>
-          <div class="muted">Kelipatan ${STEP}</div>
+          <div class="iname">${it.label}</div>
+          <div class="muted">${rupiah(it.unit * 100)}/100</div>
         </div>
-        <div class="price">${rupiah(it.unit)}/item<br><span class="muted">${rupiah(it.unit*STEP)}/100</span></div>
+        <div class="iprice">
+          <div class="u">${rupiah(it.unit)}/item</div>
+          <div class="h">Klik untuk pilih</div>
+        </div>
       `;
 
-      const row = document.createElement("div");
-      row.className = "row";
-
-      const qty = document.createElement("input");
-      qty.type = "number";
-      qty.min = STEP;
-      qty.step = STEP;
-      qty.value = STEP;
-
-      const add = document.createElement("button");
-      add.className = "btn btn-primary";
-      add.textContent = "Tambah";
-      add.addEventListener("click", ()=>{
-        const q = clampQty(qty.value);
-        if (q < STEP){
-          alert(`Qty minimal ${STEP} dan harus kelipatan ${STEP}.`);
-          return;
-        }
-        addToCart(it, q);
+      btn.addEventListener("click", ()=>{
+        showSelector(it);
       });
 
-      row.appendChild(qty);
-      row.appendChild(add);
-
-      const note = document.createElement("div");
-      note.className = "muted";
-      note.textContent = `Contoh: ${STEP}, ${STEP*2}, ${STEP*3}...`;
-
-      card.appendChild(top);
-      card.appendChild(row);
-      card.appendChild(note);
-
-      itemsEl.appendChild(card);
+      itemsEl.appendChild(btn);
     });
+  }
+
+  function showSelector(item){
+    selectedItem = item;
+    selTitleEl.textContent = item.label;
+    selSubEl.textContent = `${rupiah(item.unit)}/item • ${rupiah(item.unit*100)}/100`;
+    selQtyEl.value = 100;
+    selHintEl.textContent = "Masukkan jumlah yang ingin dibeli, lalu klik “Tambah ke Keranjang”.";
+    selectorEl.style.display = "grid";
+
+    // scroll sedikit supaya selector terlihat (mobile friendly)
+    selectorEl.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  }
+
+  function hideSelector(){
+    selectedItem = null;
+    selectorEl.style.display = "none";
   }
 
   function renderCart(){
@@ -276,7 +340,7 @@
     if (entries.length === 0){
       const empty = document.createElement("div");
       empty.className = "muted";
-      empty.textContent = "Keranjang masih kosong. Tambahkan item dari sebelah kiri.";
+      empty.textContent = "Keranjang masih kosong. Pilih item dari sebelah kiri.";
       cartEl.appendChild(empty);
     } else {
       entries.forEach((it)=>{
@@ -288,7 +352,7 @@
         const linePrice = it.qty * it.unit;
 
         meta.innerHTML = `
-          <div style="font-weight:800">${it.label}</div>
+          <div style="font-weight:900">${it.label}</div>
           <div class="small">Qty: <strong style="color:var(--text)">${it.qty}</strong> • Unit: ${rupiah(it.unit)} • Subtotal: <strong style="color:var(--text)">${rupiah(linePrice)}</strong></div>
         `;
 
@@ -297,18 +361,17 @@
 
         const qtyInput = document.createElement("input");
         qtyInput.type = "number";
-        qtyInput.min = STEP;
-        qtyInput.step = STEP;
+        qtyInput.min = 1;
+        qtyInput.step = 1;
         qtyInput.value = it.qty;
 
         qtyInput.addEventListener("change", ()=>{
-          const q = clampQty(qtyInput.value);
-          if (q < STEP){
-            alert(`Qty minimal ${STEP} dan harus kelipatan ${STEP}.`);
+          const q = parseQty(qtyInput.value);
+          if (q < 1){
+            alert("Qty minimal 1.");
             qtyInput.value = it.qty;
             return;
           }
-          it.qty = q;
           cart[it.id].qty = q;
           recalc();
         });
@@ -352,7 +415,7 @@
 
   function getTotals(){
     const entries = Object.values(cart);
-    const totalQty = entries.reduce((a,b)=>a+b.qty, 0);
+    const totalQty = entries.reduce((a,b)=>a + b.qty, 0);
     const totalPrice = entries.reduce((a,b)=>a + (b.qty*b.unit), 0);
     return { totalQty, totalPrice };
   }
@@ -361,16 +424,15 @@
     const entries = Object.values(cart);
     if (entries.length === 0) return { ok:false, msg:"Keranjang kosong." };
 
-    // setiap item harus kelipatan 100 (STEP) dan minimal 100
     for (const it of entries){
-      if (it.qty < STEP || (it.qty % STEP !== 0)){
-        return { ok:false, msg:`Qty ${it.label} harus kelipatan ${STEP}.` };
+      if (!Number.isFinite(it.qty) || it.qty < 1){
+        return { ok:false, msg:`Qty ${it.label} minimal 1.` };
       }
     }
 
     const { totalQty } = getTotals();
-    if (totalQty < STEP){
-      return { ok:false, msg:`Total minimal ${STEP} item.` };
+    if (totalQty < MIN_TOTAL_QTY){
+      return { ok:false, msg:`Minimal total order ${MIN_TOTAL_QTY} item.` };
     }
     return { ok:true, msg:"OK" };
   }
@@ -381,13 +443,13 @@
     totalPriceEl.textContent = rupiah(totalPrice);
 
     const countItems = Object.values(cart).length;
-    cartCountEl.textContent = `${countItems} jenis item`;
+    cartCountEl.textContent = `${countItems} jenis`;
 
     const v = validateRules();
     if (!v.ok){
       ruleBox.style.display = "block";
       okBox.style.display = "none";
-      ruleBox.textContent = v.msg + " (Minimal total 100 item, dan semua qty kelipatan 100.)";
+      ruleBox.textContent = v.msg;
     } else {
       ruleBox.style.display = "none";
       okBox.style.display = "block";
@@ -433,11 +495,34 @@ Total Harga: ${rupiah(totalPrice)}
 Catatan:
 ${note || "-"}
 
-Mohon konfirmasi ketersediaan antrian & estimasi pengerjaan.`;
+Mohon konfirmasi antrian & estimasi pengerjaan.`;
 
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, "_blank");
   }
+
+  // ==============================
+  // EVENTS
+  // ==============================
+  selCloseBtn.addEventListener("click", hideSelector);
+
+  selAddBtn.addEventListener("click", ()=>{
+    if (!selectedItem) return;
+
+    const q = parseQty(selQtyEl.value);
+    if (q < 1){
+      alert("Qty minimal 1.");
+      return;
+    }
+    addToCart(selectedItem, q);
+
+    // after add: keep selector open but reset qty (feel free to change)
+    selQtyEl.value = 100;
+    selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa tambah item lain lagi.";
+  });
+
+  document.getElementById("sendWA").addEventListener("click", buildWA);
+  document.getElementById("clearCart").addEventListener("click", clearCart);
 
   // ==============================
   // INIT
@@ -445,9 +530,6 @@ Mohon konfirmasi ketersediaan antrian & estimasi pengerjaan.`;
   renderTabs();
   renderItems();
   renderCart();
-
-  document.getElementById("sendWA").addEventListener("click", buildWA);
-  document.getElementById("clearCart").addEventListener("click", clearCart);
 </script>
 </body>
 </html>

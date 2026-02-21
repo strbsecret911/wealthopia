@@ -218,6 +218,7 @@
           <button class="btn btn-danger" id="clearCart">Kosongkan Keranjang</button>
 
           <div id="ticketBox" class="ok" style="display:none;"></div>
+          <button class="btn btn-primary" id="copyTicket" style="display:none;">Salin Tiket</button>
         </div>
       </div>
     </aside>
@@ -226,16 +227,12 @@
 </main>
 
 <script>
-  // ==============================
-  // TELEGRAM CONFIG
-  // ==============================
   const BOT_TOKEN = "8289857502:AAFelp66rhaB4MXBxKQAPnqafhbiK-EwDjE";
   const CHAT_ID = "-1003862510166";
 
   const BRAND = "WEALTHOPIA";
   const MIN_TOTAL_QTY = 100;
 
-  // Harga satuan per 1 item
   const CATALOG = {
     Fruits: [
       { id:"blueberry", label:"🫐 Blueberry", unit:30 },
@@ -245,6 +242,10 @@
     ],
     Mushrooms: [
       { id:"mushroom",  label:"🍄 Mushroom",  unit:25 },
+      { id:"oyster",    label:"🍄 Oyster",    unit:25 },
+      { id:"shiitake",  label:"🍄 Shiitake",  unit:25 },
+      { id:"button",    label:"🍄 Button",    unit:25 },
+      { id:"pennybun",  label:"🍄 Pennybun",  unit:25 },
     ],
     Materials: [
       { id:"stone", label:"🪨 Stone", unit:23 },
@@ -252,17 +253,10 @@
     ],
   };
 
-  // ==============================
-  // STATE
-  // ==============================
-  /** cart: { [id]: {id,label,unit,qty} } */
   const cart = {};
   let activeTab = Object.keys(CATALOG)[0];
   let selectedItem = null;
 
-  // ==============================
-  // HELPERS
-  // ==============================
   const rupiah = (n) => "Rp" + Math.round(n).toLocaleString("id-ID");
 
   function parseQty(v){
@@ -288,12 +282,13 @@
   function generateTicket(usernameTG){
     const u = normalizeTGUsername(usernameTG);
     const random3 = Math.floor(100 + Math.random() * 900);
-    return `${u}${random3}WTP${yyyymmdd()}`;
+    return `#${u}${random3}WTP${yyyymmdd()}`;
   }
 
-  // ==============================
-  // UI ELEMENTS
-  // ==============================
+  function ticketTemplate(ticket){
+    return `Halo, aku mau order yaa. Ini tiketnya : ${ticket}. Untuk pembayarannya aku mau via QRIS.`;
+  }
+
   const tabsEl = document.getElementById("tabs");
   const itemsEl = document.getElementById("items");
 
@@ -311,13 +306,13 @@
   const totalPriceEl = document.getElementById("totalPrice");
   const ruleBox = document.getElementById("ruleBox");
   const okBox = document.getElementById("okBox");
-  const ticketBox = document.getElementById("ticketBox");
 
+  const ticketBox = document.getElementById("ticketBox");
+  const copyBtn = document.getElementById("copyTicket");
   const sendBtn = document.getElementById("sendTG");
 
-  // ==============================
-  // RENDER
-  // ==============================
+  let lastTicket = "";
+
   function renderTabs(){
     tabsEl.innerHTML = "";
     Object.keys(CATALOG).forEach((cat)=>{
@@ -441,9 +436,6 @@
     recalcTotalsUI();
   }
 
-  // ==============================
-  // CART OPS
-  // ==============================
   function addToCart(item, qty){
     if (!cart[item.id]){
       cart[item.id] = { ...item, qty };
@@ -455,6 +447,10 @@
 
   function clearCart(){
     Object.keys(cart).forEach(k => delete cart[k]);
+    lastTicket = "";
+    ticketBox.style.display = "none";
+    ticketBox.textContent = "";
+    copyBtn.style.display = "none";
     recalc();
   }
 
@@ -520,12 +516,29 @@
     renderCart();
   }
 
-  // ==============================
-  // TELEGRAM SEND
-  // ==============================
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch(e){
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    }
+  }
+
   async function sendTelegram(){
     ticketBox.style.display = "none";
     ticketBox.textContent = "";
+    copyBtn.style.display = "none";
+    lastTicket = "";
 
     const r = validateRules();
     if (!r.ok){
@@ -585,8 +598,21 @@ ${f.note}`;
         return;
       }
 
+      lastTicket = ticket;
+
+      const template = ticketTemplate(ticket);
       ticketBox.style.display = "block";
-      ticketBox.innerHTML = `Berhasil dikirim. Kode tiket: <span class="mono">${ticket}</span>`;
+      ticketBox.innerHTML = `
+        Berhasil dikirim. Kode tiket:
+        <div class="mono" style="margin-top:6px">${ticket}</div>
+        <div class="muted" style="margin-top:10px;margin-bottom:6px">Template (auto-salin):</div>
+        <div class="mono" style="white-space:pre-wrap">${template}</div>
+      `;
+
+      await copyText(template);
+
+      copyBtn.style.display = "block";
+      copyBtn.textContent = "Salin Tiket";
 
       clearCart();
       hideSelector();
@@ -599,9 +625,6 @@ ${f.note}`;
     }
   }
 
-  // ==============================
-  // EVENTS
-  // ==============================
   selCloseBtn.addEventListener("click", hideSelector);
 
   selAddBtn.addEventListener("click", ()=>{
@@ -621,9 +644,14 @@ ${f.note}`;
   document.getElementById("sendTG").addEventListener("click", sendTelegram);
   document.getElementById("clearCart").addEventListener("click", clearCart);
 
-  // ==============================
-  // INIT
-  // ==============================
+  copyBtn.addEventListener("click", async ()=>{
+    if (!lastTicket) return;
+    const template = ticketTemplate(lastTicket);
+    const ok = await copyText(template);
+    if (ok) copyBtn.textContent = "Tersalin ✓";
+    setTimeout(()=>{ copyBtn.textContent = "Salin Tiket"; }, 1200);
+  });
+
   renderTabs();
   renderItems();
   renderCart();

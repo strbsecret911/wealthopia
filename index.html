@@ -136,7 +136,6 @@
       cursor:pointer;
     }
 
-    /* Ticket center area */
     .ticket-area{
       display:none;
       margin-top:12px;
@@ -168,7 +167,6 @@
       flex-wrap:wrap;
     }
 
-    /* Modal */
     .modal{
       position:fixed;
       inset:0;
@@ -239,7 +237,8 @@
   <div class="wrap">
     <h1>WEALTHOPIA — Order Form</h1>
     <div class="sub">
-      Since February 2026 | @HEARTOPLA on Telegram.<br>
+      Pilih item → akan muncul input qty + tombol “Tambah ke Keranjang”.<br>
+      <strong>Minimal total order: 100 item</strong> (tidak wajib kelipatan 100).
     </div>
   </div>
 </header>
@@ -254,7 +253,6 @@
       </div>
       <div class="panel-b">
         <div class="tabs" id="tabs"></div>
-
         <div class="items" id="items"></div>
 
         <div class="selector" id="selector">
@@ -263,7 +261,7 @@
               <div class="sel-title" id="selTitle">Item</div>
               <div class="sel-sub" id="selSub">Harga</div>
             </div>
-            <button class="btn btn-ghost" id="selClose" title="Tutup">✕</button>
+            <button class="btn btn-ghost" id="selClose" title="Tutup" type="button">✕</button>
           </div>
 
           <div class="row">
@@ -272,8 +270,8 @@
               <input id="selQty" type="number" min="0" step="5" value="0" />
             </div>
 
-            <button class="btn" id="minus5" type="button">-5</button>
-            <button class="btn" id="plus5" type="button">+5</button>
+            <button class="btn" id="minusStep" type="button">-5</button>
+            <button class="btn" id="plusStep" type="button">+5</button>
 
             <button class="btn btn-primary" id="selAdd" type="button">Tambah ke Keranjang</button>
           </div>
@@ -296,12 +294,13 @@
 
         <div class="totalbox">
           <div class="kv"><span>Total Qty</span><strong id="totalQty">0</strong></div>
+          <div class="kv" id="handlingRow" style="display:none;"><span>Handling Multi Area</span><strong id="handlingFee">Rp0</strong></div>
           <div class="kv"><span>Total Harga</span><strong id="totalPrice">Rp0</strong></div>
 
           <div id="ruleBox" class="warn" style="display:none;"></div>
 
           <div id="okBox" class="ok" style="display:none;">
-            Untuk membeli produk ini, kamu perlu menyetujui <span class="tlink" id="openTnc"><strong>Syarat dan Ketentuan</strong></span> yang kami berikan.
+            Kamu bisa membaca <span class="tlink" id="openTnc"><strong>Syarat dan Ketentuan</strong></span> di sini.
           </div>
         </div>
 
@@ -310,14 +309,14 @@
         <div style="display:grid;gap:10px">
           <div>
             <div class="muted" style="margin-bottom:6px">Nama / Inisial</div>
-            <input id="custName" type="text" placeholder="Contoh: Attara" />
+            <input id="custName" type="text" placeholder="Contoh: Dini / DJ" />
           </div>
           <div>
             <div class="muted" style="margin-bottom:6px">Username Telegram</div>
             <input id="custUser" type="text" placeholder="Contoh: @username (wajib)" />
           </div>
           <div>
-            <div class="muted" style="margin-bottom:6px">Catatan (wajib)</div>
+            <div class="muted" style="margin-bottom:6px">Catatan (opsional)</div>
             <textarea id="custNote" placeholder="Contoh: Tolong fokus blueberry dulu, lalu rasberry."></textarea>
           </div>
 
@@ -342,7 +341,6 @@
   </div>
 </main>
 
-<!-- TNC MODAL -->
 <div class="modal" id="tncModal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-label="Syarat dan Ketentuan">
     <button class="modal-close" id="tncClose" type="button" title="Tutup">✕</button>
@@ -352,7 +350,7 @@
         <div class="check" id="tncCheck"> </div>
         <div>
           <strong>Saya sudah membaca dan memahami syarat dan ketentuan</strong>
-          <div class="desc">Klik untuk menyetujui dan menutup pop-up.</div>
+          <div class="desc">Klik untuk menutup pop-up.</div>
         </div>
       </div>
     </div>
@@ -368,20 +366,25 @@
 
   const CATALOG = {
     Fruits: [
-      { id:"blueberry", label:"🫐 Blueberry", unit:30 },
-      { id:"apple",     label:"🍎 Apple",     unit:30 },
-      { id:"rasberry",  label:"🍓 Rasberry",  unit:40 },
-      { id:"mandarin",  label:"🍊 Mandarin",  unit:40 },
+      { id:"blueberry", label:"🫐 Blueberry", unit:30, kind:"unit" },
+      { id:"apple",     label:"🍎 Apple",     unit:30, kind:"unit" },
+      { id:"rasberry",  label:"🍓 Rasberry",  unit:40, kind:"unit" },
+      { id:"mandarin",  label:"🍊 Mandarin",  unit:40, kind:"unit" },
     ],
     Mushrooms: [
-      { id:"oyster",    label:"🍄 Oyster",    unit:25 },
-      { id:"shiitake",  label:"🍄 Shiitake",  unit:25 },
-      { id:"button",    label:"🍄 Button",    unit:25 },
-      { id:"pennybun",  label:"🍄 Pennybun",  unit:25 },
+      { id:"oyster",    label:"🍄 Oyster",    unit:25, kind:"unit" },
+      { id:"shiitake",  label:"🍄 Shiitake",  unit:25, kind:"unit" },
+      { id:"button",    label:"🍄 Button",    unit:25, kind:"unit" },
+      { id:"pennybun",  label:"🍄 Pennybun",  unit:25, kind:"unit" },
     ],
     Materials: [
-      { id:"stone", label:"🪨 Stone", unit:23 },
-      { id:"ore",   label:"⛏️ Ore",   unit:28 },
+      { id:"stone", label:"🪨 Stone", unit:23, kind:"unit" },
+      { id:"ore",   label:"⛏️ Ore",   unit:28, kind:"unit" },
+    ],
+    "Timber Package": [
+      { id:"timberA", label:"🪵 Timber Pack A", kind:"pack", rate:37, pack:{ timber:200, qtimber:30 }, packPrice:7500 },
+      { id:"timberB", label:"🪵 Timber Pack B", kind:"pack", rate:37, pack:{ timber:300, qtimber:60 }, packPrice:11000 },
+      { id:"timberC", label:"🪵 Timber Pack C", kind:"pack", rate:37, pack:{ timber:400, qtimber:90 }, packPrice:15000 },
     ],
   };
 
@@ -398,12 +401,6 @@
     const n = Number(v);
     if (!Number.isFinite(n)) return 0;
     return Math.floor(n);
-  }
-
-  function normalizeToStep(n, step){
-    const x = Number(n);
-    if (!Number.isFinite(x)) return 0;
-    return Math.round(x / step) * step;
   }
 
   function normalizeTGUsername(v){
@@ -430,6 +427,23 @@
     return `Halo, aku mau order yaa. Ini tiketnya : ${ticket}. Untuk pembayarannya aku mau via QRIS.`;
   }
 
+  function itemSubtotal(it){
+    return it.kind === "pack" ? (it.qty * it.packPrice) : (it.qty * it.unit);
+  }
+
+  function itemQtyCount(it){
+    return it.kind === "pack"
+      ? it.qty * ((it.pack?.timber || 0) + (it.pack?.qtimber || 0))
+      : it.qty;
+  }
+
+  function getHandlingFee(){
+    const n = Object.values(cart).length;
+    if (n <= 1) return 0;
+    if (n === 2) return 1500;
+    return (n - 1) * 1000;
+  }
+
   const tabsEl = document.getElementById("tabs");
   const itemsEl = document.getElementById("items");
 
@@ -440,12 +454,14 @@
   const selHintEl  = document.getElementById("selHint");
   const selAddBtn  = document.getElementById("selAdd");
   const selCloseBtn= document.getElementById("selClose");
-  const minus5Btn  = document.getElementById("minus5");
-  const plus5Btn   = document.getElementById("plus5");
+  const minusStepBtn = document.getElementById("minusStep");
+  const plusStepBtn = document.getElementById("plusStep");
 
   const cartEl  = document.getElementById("cart");
   const cartCountEl = document.getElementById("cartCount");
   const totalQtyEl = document.getElementById("totalQty");
+  const handlingRowEl = document.getElementById("handlingRow");
+  const handlingFeeEl = document.getElementById("handlingFee");
   const totalPriceEl = document.getElementById("totalPrice");
   const ruleBox = document.getElementById("ruleBox");
   const okBox = document.getElementById("okBox");
@@ -491,31 +507,62 @@
       btn.className = "itembtn";
       btn.type = "button";
 
-      btn.innerHTML = `
-        <div>
-          <div class="iname">${it.label}</div>
-          <div class="muted">${rupiah(it.unit * 100)}/100</div>
-        </div>
-        <div class="iprice">
-          <div class="u">${rupiah(it.unit)}/item</div>
-          <div class="h">Klik untuk pilih</div>
-        </div>
-      `;
+      if (it.kind === "pack"){
+        const timber = it.pack?.timber || 0;
+        const qtimber = it.pack?.qtimber || 0;
+        btn.innerHTML = `
+          <div>
+            <div class="iname">${it.label}</div>
+            <div class="muted">${timber} Timber 🪵 + ${qtimber} Quality Timber 🌳</div>
+          </div>
+          <div class="iprice">
+            <div class="u">${rupiah(it.packPrice)}/pack</div>
+            <div class="h">Rate: ${rupiah(it.rate)}/Timber</div>
+          </div>
+        `;
+      } else {
+        btn.innerHTML = `
+          <div>
+            <div class="iname">${it.label}</div>
+            <div class="muted">${rupiah(it.unit * 100)}/100</div>
+          </div>
+          <div class="iprice">
+            <div class="u">${rupiah(it.unit)}/item</div>
+            <div class="h">Klik untuk pilih</div>
+          </div>
+        `;
+      }
 
-      btn.addEventListener("click", ()=>{
-        showSelector(it);
-      });
-
+      btn.addEventListener("click", ()=>{ showSelector(it); });
       itemsEl.appendChild(btn);
     });
   }
 
   function showSelector(item){
     selectedItem = item;
-    selTitleEl.textContent = item.label;
-    selSubEl.textContent = `${rupiah(item.unit)}/item • ${rupiah(item.unit*100)}/100`;
-    selQtyEl.value = 0;
-    selHintEl.textContent = "Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.";
+
+    if (item.kind === "pack"){
+      const timber = item.pack?.timber || 0;
+      const qtimber = item.pack?.qtimber || 0;
+      selTitleEl.textContent = item.label;
+      selSubEl.textContent = `${timber} Timber 🪵 + ${qtimber} Quality Timber 🌳 • ${rupiah(item.packPrice)}/pack • Rate ${rupiah(item.rate)}/Timber`;
+      selQtyEl.min = 0;
+      selQtyEl.step = 1;
+      selQtyEl.value = 0;
+      minusStepBtn.textContent = "-1";
+      plusStepBtn.textContent = "+1";
+      selHintEl.textContent = "Masukkan jumlah pack (1,2,3...), lalu klik “Tambah ke Keranjang”.";
+    } else {
+      selTitleEl.textContent = item.label;
+      selSubEl.textContent = `${rupiah(item.unit)}/item • ${rupiah(item.unit*100)}/100`;
+      selQtyEl.min = 0;
+      selQtyEl.step = 5;
+      selQtyEl.value = 0;
+      minusStepBtn.textContent = "-5";
+      plusStepBtn.textContent = "+5";
+      selHintEl.textContent = "Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.";
+    }
+
     selectorEl.style.display = "grid";
     selectorEl.scrollIntoView({ behavior:"smooth", block:"nearest" });
   }
@@ -523,6 +570,59 @@
   function hideSelector(){
     selectedItem = null;
     selectorEl.style.display = "none";
+  }
+
+  function addToCart(item, qty){
+    if (!cart[item.id]){
+      cart[item.id] = { ...item, qty };
+    } else {
+      cart[item.id].qty += qty;
+    }
+    recalc();
+  }
+
+  function clearCart(){
+    Object.keys(cart).forEach(k => delete cart[k]);
+    recalc();
+  }
+
+  function getTotals(){
+    const entries = Object.values(cart);
+    const baseQty = entries.reduce((a,b)=>a + itemQtyCount(b), 0);
+    const basePrice = entries.reduce((a,b)=>a + itemSubtotal(b), 0);
+    const handlingFee = getHandlingFee();
+    const totalPrice = basePrice + handlingFee;
+    return { baseQty, basePrice, handlingFee, totalPrice };
+  }
+
+  function validateRules(){
+    const entries = Object.values(cart);
+    if (entries.length === 0) return { ok:false, msg:"Keranjang kosong." };
+
+    for (const it of entries){
+      if (!Number.isFinite(it.qty) || it.qty < 1){
+        return { ok:false, msg:`Qty ${it.label} minimal 1.` };
+      }
+    }
+
+    const { baseQty } = getTotals();
+    if (baseQty < MIN_TOTAL_QTY){
+      return { ok:false, msg:`Minimal total order ${MIN_TOTAL_QTY} item.` };
+    }
+    return { ok:true, msg:"OK" };
+  }
+
+  function validateFields(){
+    const name = document.getElementById("custName").value.trim();
+    const userRaw = document.getElementById("custUser").value.trim();
+    const note = document.getElementById("custNote").value.trim();
+
+    if (!name) return { ok:false, msg:"Nama / Inisial wajib diisi." };
+    if (!userRaw) return { ok:false, msg:"Username Telegram wajib diisi." };
+    const user = normalizeTGUsername(userRaw);
+    if (!user) return { ok:false, msg:"Username Telegram wajib diisi." };
+
+    return { ok:true, name, user, note };
   }
 
   function renderCart(){
@@ -543,12 +643,31 @@
 
         const meta = document.createElement("div");
         meta.className = "meta";
-        const linePrice = it.qty * it.unit;
 
-        meta.innerHTML = `
-          <div style="font-weight:900">${it.label}</div>
-          <div class="small">Qty: <strong style="color:var(--text)">${it.qty}</strong> • Unit: ${rupiah(it.unit)} • Subtotal: <strong style="color:var(--text)">${rupiah(linePrice)}</strong></div>
-        `;
+        const linePrice = itemSubtotal(it);
+
+        if (it.kind === "pack"){
+          const timber = it.pack?.timber || 0;
+          const qtimber = it.pack?.qtimber || 0;
+          const tTotal = it.qty * timber;
+          const qTotal = it.qty * qtimber;
+
+          meta.innerHTML = `
+            <div style="font-weight:900">${it.label}</div>
+            <div class="small">
+              Pack: <strong style="color:var(--text)">${it.qty}</strong> • Isi: ${tTotal} Timber 🪵 + ${qTotal} Quality Timber 🌳
+              • Subtotal: <strong style="color:var(--text)">${rupiah(linePrice)}</strong>
+            </div>
+          `;
+        } else {
+          meta.innerHTML = `
+            <div style="font-weight:900">${it.label}</div>
+            <div class="small">
+              Qty: <strong style="color:var(--text)">${it.qty}</strong> • Unit: ${rupiah(it.unit)}
+              • Subtotal: <strong style="color:var(--text)">${rupiah(linePrice)}</strong>
+            </div>
+          `;
+        }
 
         const right = document.createElement("div");
         right.className = "right";
@@ -556,13 +675,17 @@
         const qtyInput = document.createElement("input");
         qtyInput.type = "number";
         qtyInput.min = 0;
-        qtyInput.step = 5;
+        qtyInput.step = (it.kind === "pack") ? 1 : 5;
         qtyInput.value = it.qty;
 
         qtyInput.addEventListener("change", ()=>{
           let q = parseQty(qtyInput.value);
-          q = normalizeToStep(q, 5);
           if (q < 0) q = 0;
+
+          if (it.kind !== "pack"){
+            q = Math.round(q / 5) * 5;
+            if (q < 0) q = 0;
+          }
 
           if (q === 0){
             delete cart[it.id];
@@ -596,62 +719,17 @@
     recalcTotalsUI();
   }
 
-  function addToCart(item, qty){
-    if (!cart[item.id]){
-      cart[item.id] = { ...item, qty };
-    } else {
-      cart[item.id].qty += qty;
-    }
-    recalc();
-  }
-
-  function clearCart(){
-    Object.keys(cart).forEach(k => delete cart[k]);
-    recalc();
-  }
-
-  function getTotals(){
-    const entries = Object.values(cart);
-    const totalQty = entries.reduce((a,b)=>a + b.qty, 0);
-    const totalPrice = entries.reduce((a,b)=>a + (b.qty*b.unit), 0);
-    return { totalQty, totalPrice };
-  }
-
-  function validateRules(){
-    const entries = Object.values(cart);
-    if (entries.length === 0) return { ok:false, msg:"Keranjang kosong." };
-
-    for (const it of entries){
-      if (!Number.isFinite(it.qty) || it.qty < 1){
-        return { ok:false, msg:`Qty ${it.label} minimal 1.` };
-      }
-    }
-
-    const { totalQty } = getTotals();
-    if (totalQty < MIN_TOTAL_QTY){
-      return { ok:false, msg:`Minimal total order ${MIN_TOTAL_QTY} item.` };
-    }
-    return { ok:true, msg:"OK" };
-  }
-
-  function validateFields(){
-    const name = document.getElementById("custName").value.trim();
-    const userRaw = document.getElementById("custUser").value.trim();
-    const note = document.getElementById("custNote").value.trim();
-
-    if (!name) return { ok:false, msg:"Nama / Inisial wajib diisi." };
-    if (!userRaw) return { ok:false, msg:"Username Telegram wajib diisi." };
-    const user = normalizeTGUsername(userRaw);
-    if (!user) return { ok:false, msg:"Username Telegram wajib diisi." };
-    if (!note) return { ok:false, msg:"Catatan wajib diisi." };
-    if (!tncAccepted) return { ok:false, msg:"Kamu harus menyetujui Syarat dan Ketentuan." };
-
-    return { ok:true, name, user, note };
-  }
-
   function recalcTotalsUI(){
-    const { totalQty, totalPrice } = getTotals();
-    totalQtyEl.textContent = totalQty.toLocaleString("id-ID");
+    const { baseQty, handlingFee, totalPrice } = getTotals();
+    totalQtyEl.textContent = baseQty.toLocaleString("id-ID");
+
+    if (Object.values(cart).length > 0){
+      handlingRowEl.style.display = "flex";
+      handlingFeeEl.textContent = rupiah(handlingFee);
+    } else {
+      handlingRowEl.style.display = "none";
+    }
+
     totalPriceEl.textContent = rupiah(totalPrice);
 
     const countItems = Object.values(cart).length;
@@ -665,7 +743,7 @@
     } else {
       ruleBox.style.display = "none";
       okBox.style.display = "block";
-      okBox.innerHTML = `Untuk membeli produk ini, kamu perlu menyetujui <span class="tlink" id="openTncInline"><strong>Syarat dan Ketentuan</strong></span> yang kami berikan.`;
+      okBox.innerHTML = `Kamu bisa membaca <span class="tlink" id="openTncInline"><strong>Syarat dan Ketentuan</strong></span> di sini.`;
       const inline = document.getElementById("openTncInline");
       if (inline) inline.addEventListener("click", openTncModal);
     }
@@ -720,12 +798,20 @@
     }
 
     const ticket = generateTicket(f.user);
-    const { totalQty, totalPrice } = getTotals();
+    const { baseQty, basePrice, handlingFee, totalPrice } = getTotals();
 
     const lines = Object.values(cart).map(it => {
-      const sub = it.qty * it.unit;
-      return `- ${it.label} | Qty ${it.qty} | ${rupiah(sub)}`;
+      if (it.kind === "pack"){
+        const timber = it.pack?.timber || 0;
+        const qtimber = it.pack?.qtimber || 0;
+        const tTotal = it.qty * timber;
+        const qTotal = it.qty * qtimber;
+        return `- ${it.label} | Pack ${it.qty} | Isi ${tTotal}🪵 + ${qTotal}🌳 | ${rupiah(itemSubtotal(it))}`;
+      }
+      return `- ${it.label} | Qty ${it.qty} | ${rupiah(itemSubtotal(it))}`;
     });
+
+    const noteBlock = f.note ? `\n\nCatatan:\n${f.note}` : "";
 
     const msg =
 `📦 ${BRAND} — ORDER
@@ -737,11 +823,10 @@ Username Telegram: @${f.user}
 Detail Order:
 ${lines.join("\n")}
 
-Total Qty: ${totalQty.toLocaleString("id-ID")}
-Total Harga: ${rupiah(totalPrice)}
-
-Catatan:
-${f.note}`;
+Total Qty: ${baseQty.toLocaleString("id-ID")}
+Subtotal: ${rupiah(basePrice)}
+Handling Multi Area: ${rupiah(handlingFee)}
+Total Harga: ${rupiah(totalPrice)}${noteBlock}`;
 
     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
@@ -789,24 +874,36 @@ ${f.note}`;
 
   selCloseBtn.addEventListener("click", hideSelector);
 
-  minus5Btn.addEventListener("click", ()=>{
+  minusStepBtn.addEventListener("click", ()=>{
+    if (!selectedItem) return;
     let q = parseQty(selQtyEl.value);
-    q = normalizeToStep(q, 5);
-    q = Math.max(0, q - 5);
+    if (selectedItem.kind === "pack"){
+      q = Math.max(0, q - 1);
+    } else {
+      q = Math.max(0, Math.round(q / 5) * 5 - 5);
+    }
     selQtyEl.value = q;
   });
 
-  plus5Btn.addEventListener("click", ()=>{
+  plusStepBtn.addEventListener("click", ()=>{
+    if (!selectedItem) return;
     let q = parseQty(selQtyEl.value);
-    q = normalizeToStep(q, 5);
-    q = Math.max(0, q + 5);
+    if (selectedItem.kind === "pack"){
+      q = Math.max(0, q + 1);
+    } else {
+      q = Math.max(0, Math.round(q / 5) * 5 + 5);
+    }
     selQtyEl.value = q;
   });
 
   selQtyEl.addEventListener("change", ()=>{
+    if (!selectedItem) return;
     let q = parseQty(selQtyEl.value);
-    q = normalizeToStep(q, 5);
     if (q < 0) q = 0;
+    if (selectedItem.kind !== "pack"){
+      q = Math.round(q / 5) * 5;
+      if (q < 0) q = 0;
+    }
     selQtyEl.value = q;
   });
 
@@ -814,15 +911,24 @@ ${f.note}`;
     if (!selectedItem) return;
 
     let q = parseQty(selQtyEl.value);
-    q = normalizeToStep(q, 5);
+    if (selectedItem.kind === "pack"){
+      if (q < 1){
+        alert("Jumlah pack minimal 1.");
+        return;
+      }
+      addToCart(selectedItem, q);
+      selQtyEl.value = 0;
+      selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa pilih item lain lagi.";
+      return;
+    }
 
+    q = Math.round(q / 5) * 5;
     if (q < 1){
       alert("Qty minimal 1 (kelipatan 5).");
       return;
     }
 
     addToCart(selectedItem, q);
-
     selQtyEl.value = 0;
     selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa pilih item lain lagi.";
   });

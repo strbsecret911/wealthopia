@@ -1,969 +1,326 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>WEALTHOPIA — Order Form</title>
-  <style>
-    :root{
-      --bg:#ffffff;
-      --card:#f6f6f6;
-      --soft:#ffffff;
-      --text:#111111;
-      --muted:#666666;
-      --line:#e5e5e5;
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>WEALTHOPIA — Order Form</title>
 
-      --accent:#111111;
-      --accent2:#333333;
-      --danger:#111111;
-    }
+<style>
+:root{
+  --bg:#ffffff;
+  --card:#f6f6f6;
+  --soft:#ffffff;
+  --text:#111111;
+  --muted:#666666;
+  --line:#e5e5e5;
+}
 
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    header{padding:22px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter: blur(6px);z-index:10}
-    .wrap{max-width:1100px;margin:0 auto}
-    h1{margin:0;font-size:22px;letter-spacing:.5px}
-    .sub{color:var(--muted);margin-top:6px;font-size:13px;line-height:1.45}
-    main{padding:18px 16px 40px}
-    .grid{display:grid;grid-template-columns: 1.25fr .95fr;gap:16px}
-    @media (max-width: 940px){.grid{grid-template-columns:1fr}}
-    .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-    .panel-h{padding:14px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .panel-h h2{margin:0;font-size:14px;font-weight:800;letter-spacing:.4px}
-    .pill{font-size:12px;color:var(--muted)}
-    .panel-b{padding:14px}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap}
-    .tab{border:1px solid var(--line);background:transparent;color:var(--text);padding:8px 10px;border-radius:999px;cursor:pointer;font-size:12px}
-    .tab[aria-selected="true"]{border-color:rgba(17,17,17,.6);box-shadow:0 0 0 2px rgba(17,17,17,.10) inset}
-    .items{margin-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-    @media (max-width: 560px){.items{grid-template-columns:1fr}}
-    .itembtn{
-      width:100%;
-      border:1px solid var(--line);
-      background:var(--soft);
-      color:var(--text);
-      border-radius:14px;
-      padding:12px;
-      cursor:pointer;
-      text-align:left;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      transition:transform .05s ease, border-color .15s ease, background .15s ease;
-    }
-    .itembtn:hover{border-color:rgba(17,17,17,.35)}
-    .itembtn:active{transform:scale(.99)}
-    .iname{font-weight:900}
-    .iprice{white-space:nowrap;text-align:right}
-    .iprice .u{color:var(--accent2);font-weight:900;font-size:12px}
-    .iprice .h{color:var(--muted);font-size:12px;margin-top:4px}
-    .muted{color:var(--muted);font-size:12px}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:22px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:10}
+.wrap{max-width:1100px;margin:0 auto}
+h1{margin:0;font-size:22px}
+.sub{color:var(--muted);margin-top:6px;font-size:13px}
+main{padding:18px 16px 40px}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
 
-    .selector{
-      margin-top:12px;
-      border:1px solid var(--line);
-      background:rgba(17,17,17,.03);
-      border-radius:14px;
-      padding:12px;
-      display:none;
-      gap:10px;
-    }
-    .sel-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-    .sel-title{font-weight:900}
-    .sel-sub{color:var(--muted);font-size:12px;margin-top:4px}
-    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.panel-h{padding:14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.panel-b{padding:14px}
 
-    input[type="number"], input[type="text"], textarea{
-      width:100%;background:var(--soft);border:1px solid var(--line);color:var(--text);
-      padding:10px 10px;border-radius:12px;outline:none
-    }
-    input[type="number"]{max-width:160px}
-    textarea{min-height:84px;resize:vertical}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:transparent;padding:8px 10px;border-radius:999px;cursor:pointer;font-size:12px}
+.tab[aria-selected="true"]{box-shadow:0 0 0 2px rgba(0,0,0,.1) inset}
 
-    .btn{
-      border:1px solid var(--line);
-      background:var(--soft);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:900
-    }
-    .btn-primary{
-      background:rgba(17,17,17,.06);
-      border-color:rgba(17,17,17,.35)
-    }
-    .btn-primary:hover{background:rgba(17,17,17,.10)}
-    .btn-danger{
-      background:rgba(17,17,17,.04);
-      border-color:rgba(17,17,17,.25)
-    }
-    .btn-danger:hover{background:rgba(17,17,17,.07)}
-    .btn-ghost{background:transparent}
+.items{margin-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(max-width:560px){.items{grid-template-columns:1fr}}
 
-    .cart{display:flex;flex-direction:column;gap:10px}
-    .cart-item{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
-    .cart-item .meta{display:flex;flex-direction:column;gap:4px}
-    .cart-item .meta .small{color:var(--muted);font-size:12px}
-    .cart-item .right{display:flex;gap:8px;align-items:center}
+.itembtn{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  text-align:left;
+}
+.itembtn small{color:var(--muted)}
 
-    .totalbox{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:grid;gap:8px}
-    .kv{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:13px}
-    .kv strong{color:var(--text)}
-    .warn{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px dashed rgba(17,17,17,.35);
-      background:rgba(17,17,17,.04);
-      color:var(--text);
-      font-size:12px
-    }
-    .ok{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px dashed rgba(17,17,17,.35);
-      background:rgba(17,17,17,.04);
-      color:var(--text);
-      font-size:12px
-    }
+.selector{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px;display:none;gap:10px;background:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input,textarea,select{
+  width:100%;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff
+}
+input[type="number"]{max-width:120px}
 
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-    hr{border:none;border-top:1px solid var(--line);margin:14px 0}
+.btn{border:1px solid var(--line);background:#fff;padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:600}
+.btn-primary{background:#111;color:#fff}
+.btn-danger{background:#fff}
 
-    .tlink{
-      font-weight:900;
-      text-decoration:underline;
-      cursor:pointer;
-    }
+.cart{display:flex;flex-direction:column;gap:10px}
+.cart-item{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
 
-    .ticket-area{
-      display:none;
-      margin-top:12px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:rgba(17,17,17,.03);
-      padding:14px;
-      text-align:center;
-    }
-    .ticket-code{
-      margin-top:8px;
-      font-weight:900;
-      font-size:16px;
-    }
-    .ticket-template{
-      margin-top:10px;
-      text-align:left;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:12px;
-      background:var(--soft);
-      white-space:pre-wrap;
-    }
-    .ticket-actions{
-      margin-top:10px;
-      display:flex;
-      gap:8px;
-      justify-content:center;
-      flex-wrap:wrap;
-    }
+.totalbox{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:grid;gap:6px}
+.kv{display:flex;justify-content:space-between;font-size:14px}
+.muted{color:var(--muted);font-size:12px}
 
-    .modal{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.6);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index:9999;
-    }
-    .modal-card{
-      width:min(860px, 100%);
-      background:var(--soft);
-      border:1px solid var(--line);
-      border-radius:16px;
-      overflow:hidden;
-      position:relative;
-    }
-    .modal-close{
-      position:absolute;
-      top:10px;
-      right:10px;
-      width:36px;
-      height:36px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(17,17,17,.06);
-      cursor:pointer;
-      font-weight:900;
-    }
-    .modal-body{
-      padding:12px;
-      display:grid;
-      gap:12px;
-    }
-    .modal-img{
-      width:100%;
-      height:auto;
-      display:block;
-      border-radius:12px;
-      border:1px solid var(--line);
-    }
-    .modal-accept{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:12px;
-      background:rgba(17,17,17,.03);
-      cursor:pointer;
-      user-select:none;
-    }
-    .check{
-      width:22px;height:22px;border-radius:7px;
-      border:1px solid var(--line);
-      display:grid;place-items:center;
-      background:var(--soft);
-      font-weight:900;
-    }
-    .modal-accept strong{font-weight:900}
-    .modal-accept .desc{color:var(--muted);font-size:12px;margin-top:2px}
-  </style>
+.ticket-area{display:none;margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;background:#fff}
+.ticket-template{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px;white-space:pre-wrap;text-align:left}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.two-col{grid-template-columns:1fr}}
+</style>
 </head>
 
 <body>
 <header>
-  <div class="wrap">
-    <h1>WEALTHOPIA — Order Form</h1>
-    <div class="sub">
-      Pilih item → akan muncul input qty + tombol “Tambah ke Keranjang”.<br>
-      <strong>Minimal total order: 100 item</strong> (tidak wajib kelipatan 100).
-    </div>
-  </div>
+<div class="wrap">
+<h1>WEALTHOPIA — Order Form</h1>
+<div class="sub">Minimal transaksi gabungan Rp3.500 (kecuali pure quest).</div>
+</div>
 </header>
 
 <main class="wrap">
-  <div class="grid">
+<div class="grid">
 
-    <section class="panel">
-      <div class="panel-h">
-        <h2>Pilih Item</h2>
-        <div class="pill">Klik item untuk mulai</div>
-      </div>
-      <div class="panel-b">
-        <div class="tabs" id="tabs"></div>
-        <div class="items" id="items"></div>
+<section class="panel">
+<div class="panel-h"><strong>Pilih Item</strong></div>
+<div class="panel-b">
+<div class="tabs" id="tabs"></div>
+<div class="items" id="items"></div>
 
-        <div class="selector" id="selector">
-          <div class="sel-top">
-            <div>
-              <div class="sel-title" id="selTitle">Item</div>
-              <div class="sel-sub" id="selSub">Harga</div>
-            </div>
-            <button class="btn btn-ghost" id="selClose" title="Tutup" type="button">✕</button>
-          </div>
+<div class="selector" id="selector">
+<div id="selTitle"></div>
+<div class="row">
+<input type="number" id="selQty" value="0" min="0"/>
+<button class="btn" id="minusBtn">-</button>
+<button class="btn" id="plusBtn">+</button>
+<button class="btn btn-primary" id="addBtn">Tambah</button>
+</div>
+</div>
+</div>
+</section>
 
-          <div class="row">
-            <div style="min-width:160px">
-              <div class="muted" style="margin-bottom:6px">Qty</div>
-              <input id="selQty" type="number" min="0" step="5" value="0" />
-            </div>
+<aside class="panel">
+<div class="panel-h"><strong>Keranjang</strong></div>
+<div class="panel-b">
 
-            <button class="btn" id="minusStep" type="button">-5</button>
-            <button class="btn" id="plusStep" type="button">+5</button>
+<div class="cart" id="cart"></div>
+<button class="btn btn-danger" id="clearBtn" style="display:none">Kosongkan Keranjang</button>
 
-            <button class="btn btn-primary" id="selAdd" type="button">Tambah ke Keranjang</button>
-          </div>
-
-          <div class="muted" id="selHint">Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.</div>
-        </div>
-      </div>
-    </section>
-
-    <aside class="panel">
-      <div class="panel-h">
-        <h2>Keranjang & Checkout</h2>
-        <div class="pill" id="cartCount">0 jenis</div>
-      </div>
-
-      <div class="panel-b">
-        <div class="cart" id="cart"></div>
-
-        <button class="btn btn-danger" id="clearCart" type="button" style="margin-top:8px;display:none;">Kosongkan Keranjang</button>
-
-        <div class="totalbox">
-          <div class="kv"><span>Total Qty</span><strong id="totalQty">0</strong></div>
-          <div class="kv" id="handlingRow" style="display:none;"><span>Handling Multi Area</span><strong id="handlingFee">Rp0</strong></div>
-          <div class="kv"><span>Total Harga</span><strong id="totalPrice">Rp0</strong></div>
-
-          <div id="ruleBox" class="warn" style="display:none;"></div>
-
-          <div id="okBox" class="ok" style="display:none;">
-            Kamu bisa membaca <span class="tlink" id="openTnc"><strong>Syarat dan Ketentuan</strong></span> di sini.
-          </div>
-        </div>
-
-        <hr>
-
-        <div style="display:grid;gap:10px">
-          <div>
-            <div class="muted" style="margin-bottom:6px">Nama / Inisial</div>
-            <input id="custName" type="text" placeholder="Contoh: Dini / DJ" />
-          </div>
-          <div>
-            <div class="muted" style="margin-bottom:6px">Username Telegram</div>
-            <input id="custUser" type="text" placeholder="Contoh: @username (wajib)" />
-          </div>
-          <div>
-            <div class="muted" style="margin-bottom:6px">Catatan (opsional)</div>
-            <textarea id="custNote" placeholder="Contoh: Tolong fokus blueberry dulu, lalu rasberry."></textarea>
-          </div>
-
-          <button class="btn btn-primary" id="sendTG" type="button">Order Sekarang</button>
-
-          <div class="ticket-area" id="ticketArea">
-            <div style="font-weight:900">Berhasil dikirim.</div>
-            <div class="ticket-code mono" id="ticketCode"></div>
-
-            <div class="muted" style="margin-top:10px;margin-bottom:6px">Template (auto-salin):</div>
-            <div class="ticket-template mono" id="ticketTemplate"></div>
-
-            <div class="ticket-actions">
-              <button class="btn btn-primary" id="copyTicket" type="button">Salin Tiket</button>
-              <a class="btn" id="openBot" href="https://t.me/wealthopiabot" target="_blank" rel="noopener">Buka Bot</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-  </div>
-</main>
-
-<div class="modal" id="tncModal" aria-hidden="true">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Syarat dan Ketentuan">
-    <button class="modal-close" id="tncClose" type="button" title="Tutup">✕</button>
-    <div class="modal-body">
-      <img class="modal-img" alt="Syarat dan Ketentuan" src="https://keeptnc.carrd.co/assets/images/gallery01/d292c96a_original.jpg?v=290756c8" />
-      <div class="modal-accept" id="tncAccept" role="button" tabindex="0">
-        <div class="check" id="tncCheck"> </div>
-        <div>
-          <strong>Saya sudah membaca dan memahami syarat dan ketentuan</strong>
-          <div class="desc">Klik untuk menutup pop-up.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="totalbox">
+<div class="kv"><span>Total Qty</span><strong id="totalQty">0</strong></div>
+<div class="kv" id="handlingRow" style="display:none"><span>Handling Multi Area</span><strong id="handlingFee">Rp0</strong></div>
+<div class="kv"><span>Total Harga</span><strong id="totalPrice">Rp0</strong></div>
+<div class="muted" id="ruleMsg"></div>
 </div>
 
+<hr>
+
+<div style="display:grid;gap:10px">
+<input id="custName" placeholder="Nama / Inisial"/>
+<input id="custUser" placeholder="Username Telegram"/>
+<select id="loginMethod">
+<option value="">Metode Login</option>
+<option>Google</option>
+<option>Facebook</option>
+</select>
+<textarea id="custNote" placeholder="Catatan (opsional)"></textarea>
+
+<button class="btn btn-primary" id="orderBtn">Order Sekarang</button>
+
+<div class="ticket-area" id="ticketArea">
+<div id="ticketCode"></div>
+<div class="ticket-template" id="ticketTemplate"></div>
+<button class="btn btn-primary" id="copyBtn">Salin Tiket</button>
+<a href="https://t.me/wealthopiabot" target="_blank" class="btn">Buka Bot</a>
+</div>
+</div>
+
+</div>
+</aside>
+
+</div>
+</main>
+
 <script>
-  const BOT_TOKEN = "8289857502:AAFelp66rhaB4MXBxKQAPnqafhbiK-EwDjE";
-  const CHAT_ID = "-1003862510166";
-
-  const BRAND = "WEALTHOPIA";
-  const MIN_TOTAL_QTY = 100;
-
-  const CATALOG = {
-    Fruits: [
-      { id:"blueberry", label:"🫐 Blueberry", unit:30, kind:"unit" },
-      { id:"apple",     label:"🍎 Apple",     unit:30, kind:"unit" },
-      { id:"rasberry",  label:"🍓 Rasberry",  unit:40, kind:"unit" },
-      { id:"mandarin",  label:"🍊 Mandarin",  unit:40, kind:"unit" },
-    ],
-    Mushrooms: [
-      { id:"oyster",    label:"🍄 Oyster",    unit:25, kind:"unit" },
-      { id:"shiitake",  label:"🍄 Shiitake",  unit:25, kind:"unit" },
-      { id:"button",    label:"🍄 Button",    unit:25, kind:"unit" },
-      { id:"pennybun",  label:"🍄 Pennybun",  unit:25, kind:"unit" },
-    ],
-    Materials: [
-      { id:"stone", label:"🪨 Stone", unit:23, kind:"unit" },
-      { id:"ore",   label:"⛏️ Ore",   unit:28, kind:"unit" },
-    ],
-    "Timber Package": [
-      { id:"timberA", label:"🪵 Timber Pack A", kind:"pack", rate:37, pack:{ timber:200, qtimber:30 }, packPrice:7500 },
-      { id:"timberB", label:"🪵 Timber Pack B", kind:"pack", rate:37, pack:{ timber:300, qtimber:60 }, packPrice:11000 },
-      { id:"timberC", label:"🪵 Timber Pack C", kind:"pack", rate:37, pack:{ timber:400, qtimber:90 }, packPrice:15000 },
-    ],
-  };
-
-  const cart = {};
-  let activeTab = Object.keys(CATALOG)[0];
-  let selectedItem = null;
-
-  let tncAccepted = false;
-  let lastTicket = "";
-
-  const rupiah = (n) => "Rp" + Math.round(n).toLocaleString("id-ID");
-
-  function parseQty(v){
-    const n = Number(v);
-    if (!Number.isFinite(n)) return 0;
-    return Math.floor(n);
-  }
-
-  function normalizeTGUsername(v){
-    const raw = String(v || "").trim();
-    if (!raw) return "";
-    return raw.startsWith("@") ? raw.slice(1) : raw;
-  }
-
-  function yyyymmdd(){
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth()+1).padStart(2,"0");
-    const d = String(now.getDate()).padStart(2,"0");
-    return `${y}${m}${d}`;
-  }
-
-  function generateTicket(usernameTG){
-    const u = normalizeTGUsername(usernameTG);
-    const random3 = Math.floor(100 + Math.random() * 900);
-    return `#${u}${random3}WTP${yyyymmdd()}`;
-  }
-
-  function ticketTemplate(ticket){
-    return `Halo, aku mau order yaa. Ini tiketnya : ${ticket}. Untuk pembayarannya aku mau via QRIS.`;
-  }
-
-  function itemSubtotal(it){
-    return it.kind === "pack" ? (it.qty * it.packPrice) : (it.qty * it.unit);
-  }
-
-  function itemQtyCount(it){
-    return it.kind === "pack"
-      ? it.qty * ((it.pack?.timber || 0) + (it.pack?.qtimber || 0))
-      : it.qty;
-  }
-
-  function getHandlingFee(){
-    const n = Object.values(cart).length;
-    if (n <= 1) return 0;
-    if (n === 2) return 1500;
-    return (n - 1) * 1000;
-  }
-
-  const tabsEl = document.getElementById("tabs");
-  const itemsEl = document.getElementById("items");
-
-  const selectorEl = document.getElementById("selector");
-  const selTitleEl = document.getElementById("selTitle");
-  const selSubEl   = document.getElementById("selSub");
-  const selQtyEl   = document.getElementById("selQty");
-  const selHintEl  = document.getElementById("selHint");
-  const selAddBtn  = document.getElementById("selAdd");
-  const selCloseBtn= document.getElementById("selClose");
-  const minusStepBtn = document.getElementById("minusStep");
-  const plusStepBtn = document.getElementById("plusStep");
-
-  const cartEl  = document.getElementById("cart");
-  const cartCountEl = document.getElementById("cartCount");
-  const totalQtyEl = document.getElementById("totalQty");
-  const handlingRowEl = document.getElementById("handlingRow");
-  const handlingFeeEl = document.getElementById("handlingFee");
-  const totalPriceEl = document.getElementById("totalPrice");
-  const ruleBox = document.getElementById("ruleBox");
-  const okBox = document.getElementById("okBox");
-  const clearBtn = document.getElementById("clearCart");
-
-  const sendBtn = document.getElementById("sendTG");
-
-  const ticketArea = document.getElementById("ticketArea");
-  const ticketCodeEl = document.getElementById("ticketCode");
-  const ticketTemplateEl = document.getElementById("ticketTemplate");
-  const copyBtn = document.getElementById("copyTicket");
-
-  const tncModal = document.getElementById("tncModal");
-  const tncClose = document.getElementById("tncClose");
-  const tncAccept = document.getElementById("tncAccept");
-  const tncCheck = document.getElementById("tncCheck");
-  const openTnc = document.getElementById("openTnc");
-
-  function renderTabs(){
-    tabsEl.innerHTML = "";
-    Object.keys(CATALOG).forEach((cat)=>{
-      const b = document.createElement("button");
-      b.className = "tab";
-      b.textContent = cat;
-      b.type = "button";
-      b.setAttribute("aria-selected", String(cat===activeTab));
-      b.addEventListener("click", ()=>{
-        activeTab = cat;
-        renderTabs();
-        renderItems();
-        hideSelector();
-      });
-      tabsEl.appendChild(b);
-    });
-  }
-
-  function renderItems(){
-    const list = CATALOG[activeTab];
-    itemsEl.innerHTML = "";
-
-    list.forEach((it)=>{
-      const btn = document.createElement("button");
-      btn.className = "itembtn";
-      btn.type = "button";
-
-      if (it.kind === "pack"){
-        const timber = it.pack?.timber || 0;
-        const qtimber = it.pack?.qtimber || 0;
-        btn.innerHTML = `
-          <div>
-            <div class="iname">${it.label}</div>
-            <div class="muted">${timber} Timber 🪵 + ${qtimber} Quality Timber 🌳</div>
-          </div>
-          <div class="iprice">
-            <div class="u">${rupiah(it.packPrice)}/pack</div>
-            <div class="h">Rate: ${rupiah(it.rate)}/Timber</div>
-          </div>
-        `;
-      } else {
-        btn.innerHTML = `
-          <div>
-            <div class="iname">${it.label}</div>
-            <div class="muted">${rupiah(it.unit * 100)}/100</div>
-          </div>
-          <div class="iprice">
-            <div class="u">${rupiah(it.unit)}/item</div>
-            <div class="h">Klik untuk pilih</div>
-          </div>
-        `;
-      }
-
-      btn.addEventListener("click", ()=>{ showSelector(it); });
-      itemsEl.appendChild(btn);
-    });
-  }
-
-  function showSelector(item){
-    selectedItem = item;
-
-    if (item.kind === "pack"){
-      const timber = item.pack?.timber || 0;
-      const qtimber = item.pack?.qtimber || 0;
-      selTitleEl.textContent = item.label;
-      selSubEl.textContent = `${timber} Timber 🪵 + ${qtimber} Quality Timber 🌳 • ${rupiah(item.packPrice)}/pack • Rate ${rupiah(item.rate)}/Timber`;
-      selQtyEl.min = 0;
-      selQtyEl.step = 1;
-      selQtyEl.value = 0;
-      minusStepBtn.textContent = "-1";
-      plusStepBtn.textContent = "+1";
-      selHintEl.textContent = "Masukkan jumlah pack (1,2,3...), lalu klik “Tambah ke Keranjang”.";
-    } else {
-      selTitleEl.textContent = item.label;
-      selSubEl.textContent = `${rupiah(item.unit)}/item • ${rupiah(item.unit*100)}/100`;
-      selQtyEl.min = 0;
-      selQtyEl.step = 5;
-      selQtyEl.value = 0;
-      minusStepBtn.textContent = "-5";
-      plusStepBtn.textContent = "+5";
-      selHintEl.textContent = "Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.";
-    }
-
-    selectorEl.style.display = "grid";
-    selectorEl.scrollIntoView({ behavior:"smooth", block:"nearest" });
-  }
-
-  function hideSelector(){
-    selectedItem = null;
-    selectorEl.style.display = "none";
-  }
-
-  function addToCart(item, qty){
-    if (!cart[item.id]){
-      cart[item.id] = { ...item, qty };
-    } else {
-      cart[item.id].qty += qty;
-    }
-    recalc();
-  }
-
-  function clearCart(){
-    Object.keys(cart).forEach(k => delete cart[k]);
-    recalc();
-  }
-
-  function getTotals(){
-    const entries = Object.values(cart);
-    const baseQty = entries.reduce((a,b)=>a + itemQtyCount(b), 0);
-    const basePrice = entries.reduce((a,b)=>a + itemSubtotal(b), 0);
-    const handlingFee = getHandlingFee();
-    const totalPrice = basePrice + handlingFee;
-    return { baseQty, basePrice, handlingFee, totalPrice };
-  }
-
-  function validateRules(){
-    const entries = Object.values(cart);
-    if (entries.length === 0) return { ok:false, msg:"Keranjang kosong." };
-
-    for (const it of entries){
-      if (!Number.isFinite(it.qty) || it.qty < 1){
-        return { ok:false, msg:`Qty ${it.label} minimal 1.` };
-      }
-    }
-
-    const { baseQty } = getTotals();
-    if (baseQty < MIN_TOTAL_QTY){
-      return { ok:false, msg:`Minimal total order ${MIN_TOTAL_QTY} item.` };
-    }
-    return { ok:true, msg:"OK" };
-  }
-
-  function validateFields(){
-    const name = document.getElementById("custName").value.trim();
-    const userRaw = document.getElementById("custUser").value.trim();
-    const note = document.getElementById("custNote").value.trim();
-
-    if (!name) return { ok:false, msg:"Nama / Inisial wajib diisi." };
-    if (!userRaw) return { ok:false, msg:"Username Telegram wajib diisi." };
-    const user = normalizeTGUsername(userRaw);
-    if (!user) return { ok:false, msg:"Username Telegram wajib diisi." };
-
-    return { ok:true, name, user, note };
-  }
-
-  function renderCart(){
-    const entries = Object.values(cart);
-    cartEl.innerHTML = "";
-
-    if (entries.length === 0){
-      const empty = document.createElement("div");
-      empty.className = "muted";
-      empty.textContent = "Keranjang masih kosong. Pilih item dari sebelah kiri.";
-      cartEl.appendChild(empty);
-      clearBtn.style.display = "none";
-    } else {
-      clearBtn.style.display = "block";
-      entries.forEach((it)=>{
-        const box = document.createElement("div");
-        box.className = "cart-item";
-
-        const meta = document.createElement("div");
-        meta.className = "meta";
-
-        const linePrice = itemSubtotal(it);
-
-        if (it.kind === "pack"){
-          const timber = it.pack?.timber || 0;
-          const qtimber = it.pack?.qtimber || 0;
-          const tTotal = it.qty * timber;
-          const qTotal = it.qty * qtimber;
-
-          meta.innerHTML = `
-            <div style="font-weight:900">${it.label}</div>
-            <div class="small">
-              Pack: <strong style="color:var(--text)">${it.qty}</strong> • Isi: ${tTotal} Timber 🪵 + ${qTotal} Quality Timber 🌳
-              • Subtotal: <strong style="color:var(--text)">${rupiah(linePrice)}</strong>
-            </div>
-          `;
-        } else {
-          meta.innerHTML = `
-            <div style="font-weight:900">${it.label}</div>
-            <div class="small">
-              Qty: <strong style="color:var(--text)">${it.qty}</strong> • Unit: ${rupiah(it.unit)}
-              • Subtotal: <strong style="color:var(--text)">${rupiah(linePrice)}</strong>
-            </div>
-          `;
-        }
-
-        const right = document.createElement("div");
-        right.className = "right";
-
-        const qtyInput = document.createElement("input");
-        qtyInput.type = "number";
-        qtyInput.min = 0;
-        qtyInput.step = (it.kind === "pack") ? 1 : 5;
-        qtyInput.value = it.qty;
-
-        qtyInput.addEventListener("change", ()=>{
-          let q = parseQty(qtyInput.value);
-          if (q < 0) q = 0;
-
-          if (it.kind !== "pack"){
-            q = Math.round(q / 5) * 5;
-            if (q < 0) q = 0;
-          }
-
-          if (q === 0){
-            delete cart[it.id];
-            recalc();
-            return;
-          }
-
-          cart[it.id].qty = q;
-          qtyInput.value = q;
-          recalc();
-        });
-
-        const remove = document.createElement("button");
-        remove.className = "btn btn-danger";
-        remove.type = "button";
-        remove.textContent = "Hapus";
-        remove.addEventListener("click", ()=>{
-          delete cart[it.id];
-          recalc();
-        });
-
-        right.appendChild(qtyInput);
-        right.appendChild(remove);
-
-        box.appendChild(meta);
-        box.appendChild(right);
-        cartEl.appendChild(box);
-      });
-    }
-
-    recalcTotalsUI();
-  }
-
-  function recalcTotalsUI(){
-    const { baseQty, handlingFee, totalPrice } = getTotals();
-    totalQtyEl.textContent = baseQty.toLocaleString("id-ID");
-
-    if (Object.values(cart).length > 0){
-      handlingRowEl.style.display = "flex";
-      handlingFeeEl.textContent = rupiah(handlingFee);
-    } else {
-      handlingRowEl.style.display = "none";
-    }
-
-    totalPriceEl.textContent = rupiah(totalPrice);
-
-    const countItems = Object.values(cart).length;
-    cartCountEl.textContent = `${countItems} jenis`;
-
-    const v = validateRules();
-    if (!v.ok){
-      ruleBox.style.display = "block";
-      okBox.style.display = "none";
-      ruleBox.textContent = v.msg;
-    } else {
-      ruleBox.style.display = "none";
-      okBox.style.display = "block";
-      okBox.innerHTML = `Kamu bisa membaca <span class="tlink" id="openTncInline"><strong>Syarat dan Ketentuan</strong></span> di sini.`;
-      const inline = document.getElementById("openTncInline");
-      if (inline) inline.addEventListener("click", openTncModal);
-    }
-  }
-
-  function recalc(){
-    renderCart();
-  }
-
-  async function copyText(text){
-    try{
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch(e){
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(ta);
-      return ok;
-    }
-  }
-
-  function openTncModal(){
-    tncModal.style.display = "flex";
-    tncModal.setAttribute("aria-hidden", "false");
-  }
-
-  function closeTncModal(){
-    tncModal.style.display = "none";
-    tncModal.setAttribute("aria-hidden", "true");
-  }
-
-  async function sendTelegram(){
-    ticketArea.style.display = "none";
-    lastTicket = "";
-
-    const r = validateRules();
-    if (!r.ok){
-      alert(r.msg);
-      return;
-    }
-
-    const f = validateFields();
-    if (!f.ok){
-      alert(f.msg);
-      return;
-    }
-
-    const ticket = generateTicket(f.user);
-    const { baseQty, basePrice, handlingFee, totalPrice } = getTotals();
-
-    const lines = Object.values(cart).map(it => {
-      if (it.kind === "pack"){
-        const timber = it.pack?.timber || 0;
-        const qtimber = it.pack?.qtimber || 0;
-        const tTotal = it.qty * timber;
-        const qTotal = it.qty * qtimber;
-        return `- ${it.label} | Pack ${it.qty} | Isi ${tTotal}🪵 + ${qTotal}🌳 | ${rupiah(itemSubtotal(it))}`;
-      }
-      return `- ${it.label} | Qty ${it.qty} | ${rupiah(itemSubtotal(it))}`;
-    });
-
-    const noteBlock = f.note ? `\n\nCatatan:\n${f.note}` : "";
-
-    const msg =
-`📦 ${BRAND} — ORDER
-
-🎟 Ticket: ${ticket}
-Nama / Inisial: ${f.name}
-Username Telegram: @${f.user}
-
-Detail Order:
-${lines.join("\n")}
-
-Total Qty: ${baseQty.toLocaleString("id-ID")}
-Subtotal: ${rupiah(basePrice)}
-Handling Multi Area: ${rupiah(handlingFee)}
-Total Harga: ${rupiah(totalPrice)}${noteBlock}`;
-
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-    sendBtn.disabled = true;
-    sendBtn.textContent = "Mengirim...";
-
-    try{
-      const res = await fetch(url,{
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: msg
-        })
-      });
-
-      const data = await res.json();
-
-      if (!data || !data.ok){
-        alert("Gagal kirim ke Telegram.");
-        return;
-      }
-
-      lastTicket = ticket;
-
-      const template = ticketTemplate(ticket);
-      ticketCodeEl.textContent = ticket;
-      ticketTemplateEl.textContent = template;
-      ticketArea.style.display = "block";
-
-      await copyText(template);
-
-      clearCart();
-      hideSelector();
-
-      ticketArea.scrollIntoView({ behavior:"smooth", block:"center" });
-
-    } catch(e){
-      alert("Terjadi kesalahan saat mengirim.");
-    } finally {
-      sendBtn.disabled = false;
-      sendBtn.textContent = "Order Sekarang";
-    }
-  }
-
-  selCloseBtn.addEventListener("click", hideSelector);
-
-  minusStepBtn.addEventListener("click", ()=>{
-    if (!selectedItem) return;
-    let q = parseQty(selQtyEl.value);
-    if (selectedItem.kind === "pack"){
-      q = Math.max(0, q - 1);
-    } else {
-      q = Math.max(0, Math.round(q / 5) * 5 - 5);
-    }
-    selQtyEl.value = q;
-  });
-
-  plusStepBtn.addEventListener("click", ()=>{
-    if (!selectedItem) return;
-    let q = parseQty(selQtyEl.value);
-    if (selectedItem.kind === "pack"){
-      q = Math.max(0, q + 1);
-    } else {
-      q = Math.max(0, Math.round(q / 5) * 5 + 5);
-    }
-    selQtyEl.value = q;
-  });
-
-  selQtyEl.addEventListener("change", ()=>{
-    if (!selectedItem) return;
-    let q = parseQty(selQtyEl.value);
-    if (q < 0) q = 0;
-    if (selectedItem.kind !== "pack"){
-      q = Math.round(q / 5) * 5;
-      if (q < 0) q = 0;
-    }
-    selQtyEl.value = q;
-  });
-
-  selAddBtn.addEventListener("click", ()=>{
-    if (!selectedItem) return;
-
-    let q = parseQty(selQtyEl.value);
-    if (selectedItem.kind === "pack"){
-      if (q < 1){
-        alert("Jumlah pack minimal 1.");
-        return;
-      }
-      addToCart(selectedItem, q);
-      selQtyEl.value = 0;
-      selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa pilih item lain lagi.";
-      return;
-    }
-
-    q = Math.round(q / 5) * 5;
-    if (q < 1){
-      alert("Qty minimal 1 (kelipatan 5).");
-      return;
-    }
-
-    addToCart(selectedItem, q);
-    selQtyEl.value = 0;
-    selHintEl.textContent = "Ditambahkan ke keranjang. Kamu bisa pilih item lain lagi.";
-  });
-
-  openTnc.addEventListener("click", openTncModal);
-  tncClose.addEventListener("click", closeTncModal);
-
-  tncAccept.addEventListener("click", ()=>{
-    tncAccepted = true;
-    tncCheck.textContent = "✓";
-    closeTncModal();
-  });
-  tncAccept.addEventListener("keydown", (e)=>{
-    if (e.key === "Enter" || e.key === " "){
-      e.preventDefault();
-      tncAccepted = true;
-      tncCheck.textContent = "✓";
-      closeTncModal();
-    }
-  });
-
-  clearBtn.addEventListener("click", clearCart);
-  sendBtn.addEventListener("click", sendTelegram);
-
-  copyBtn.addEventListener("click", async ()=>{
-    if (!lastTicket) return;
-    const template = ticketTemplate(lastTicket);
-    const ok = await copyText(template);
-    if (ok) copyBtn.textContent = "Tersalin ✓";
-    setTimeout(()=>{ copyBtn.textContent = "Salin Tiket"; }, 1200);
-  });
-
-  renderTabs();
-  renderItems();
-  renderCart();
+const BOT_TOKEN="8289857502:AAFelp66rhaB4MXBxKQAPnqafhbiK-EwDjE";
+const CHAT_ID="-1003862510166";
+
+const CATALOG={
+"Fruits":[
+{id:"blueberry",label:"Blueberry",price:30,type:"farm"},
+{id:"apple",label:"Apple",price:30,type:"farm"},
+{id:"rasberry",label:"Rasberry",price:40,type:"farm"},
+{id:"mandarin",label:"Mandarin",price:40,type:"farm"}
+],
+"Mushrooms":[
+{id:"oyster",label:"Oyster",price:25,type:"farm"},
+{id:"shiitake",label:"Shiitake",price:25,type:"farm"},
+{id:"button",label:"Button",price:25,type:"farm"},
+{id:"pennybun",label:"Pennybun",price:25,type:"farm"}
+],
+"Materials":[
+{id:"stone",label:"Stone",price:23,type:"farm",min150:true},
+{id:"ore",label:"Ore",price:28,type:"farm",min150:true}
+],
+"Timber Package":[
+{id:"A",label:"Pack A (200+30)",packPrice:7500,type:"timber"},
+{id:"B",label:"Pack B (300+60)",packPrice:11000,type:"timber"},
+{id:"C",label:"Pack C (400+90)",packPrice:15000,type:"timber"},
+{id:"D",label:"Pack D (500+120)",packPrice:18500,type:"timber"},
+{id:"E",label:"Pack E (600+150)",packPrice:22000,type:"timber"}
+],
+"JOKI-QUEST / STORY":[
+{id:"daily",label:"Daily Quest",type:"daily"},
+{id:"weekly",label:"Weekly Quest (4.000)",price:4000,type:"quest"},
+{id:"main",label:"Main Quest (6.000)",price:6000,type:"quest"},
+{id:"gossip",label:"Gossip Quest (4.000)",price:4000,type:"quest"},
+{id:"fullweek",label:"Full Week (35 Daily)",price:85000,type:"quest"},
+{id:"completeweek",label:"Complete Week (35 Daily + Weekly)",price:89000,type:"quest"}
+]
+};
+
+let cart={};
+let activeTab=Object.keys(CATALOG)[0];
+let selected=null;
+
+function rupiah(n){return"Rp"+n.toLocaleString("id-ID")}
+function dailyPrice(q){
+const full=Math.floor(q/5);
+const sisa=q%5;
+return(full*14000)+(sisa*3000)
+}
+
+function handlingFee(){
+const farmItems=Object.values(cart).filter(i=>i.type==="farm");
+if(farmItems.length<=1)return 0;
+if(farmItems.length===2)return 1500;
+return(farmItems.length-1)*1000;
+}
+
+function totals(){
+let qty=0,price=0;
+Object.values(cart).forEach(i=>{
+if(i.type==="daily"){
+price+=dailyPrice(i.qty);
+}else if(i.type==="farm"){
+price+=i.qty*i.price;
+qty+=i.qty;
+}else if(i.type==="timber"){
+price+=i.qty*i.packPrice;
+}else{
+price+=i.qty*i.price;
+}
+});
+return{qty,price}
+}
+
+function validate(){
+const {qty,price}=totals();
+const farmItems=Object.values(cart).filter(i=>i.type==="farm");
+if(farmItems.length){
+if(qty<100)return"Minimal qty farming 100";
+if(price<3500)return"Minimal transaksi gabungan Rp3.500";
+farmItems.forEach(i=>{
+if(i.min150 && farmItems.length===1 && i.qty<150){
+return"Stone/Ore minimal 150 jika berdiri sendiri";
+}
+});
+}
+return"";
+}
+
+function render(){
+const itemsEl=document.getElementById("items");
+itemsEl.innerHTML="";
+CATALOG[activeTab].forEach(it=>{
+const b=document.createElement("button");
+b.className="itembtn";
+b.innerHTML=`<div>${it.label}</div><small>${it.price?rupiah(it.price):it.packPrice?rupiah(it.packPrice):""}</small>`;
+b.onclick=()=>{selected=it;document.getElementById("selector").style.display="block";document.getElementById("selTitle").innerText=it.label}
+itemsEl.appendChild(b);
+});
+renderCart();
+}
+
+function renderCart(){
+const cartEl=document.getElementById("cart");
+cartEl.innerHTML="";
+Object.values(cart).forEach(i=>{
+const d=document.createElement("div");
+d.className="cart-item";
+d.innerHTML=`<div>${i.label} (${i.qty})</div><button class="btn btn-danger">X</button>`;
+d.querySelector("button").onclick=()=>{delete cart[i.id];render()}
+cartEl.appendChild(d);
+});
+document.getElementById("clearBtn").style.display=Object.keys(cart).length?"block":"none";
+
+const {qty,price}=totals();
+document.getElementById("totalQty").innerText=qty;
+const h=handlingFee();
+if(h){document.getElementById("handlingRow").style.display="flex";document.getElementById("handlingFee").innerText=rupiah(h);price+=h}else{
+document.getElementById("handlingRow").style.display="none"
+}
+document.getElementById("totalPrice").innerText=rupiah(price);
+document.getElementById("ruleMsg").innerText=validate();
+}
+
+document.getElementById("addBtn").onclick=()=>{
+if(!selected)return;
+let q=parseInt(document.getElementById("selQty").value)||0;
+if(q<=0)return;
+if(!cart[selected.id])cart[selected.id]={...selected,qty:0};
+cart[selected.id].qty+=q;
+document.getElementById("selQty").value=0;
+render();
+};
+
+document.getElementById("clearBtn").onclick=()=>{cart={};render()};
+
+document.getElementById("orderBtn").onclick=async()=>{
+const error=validate();
+if(error){alert(error);return;}
+const name=document.getElementById("custName").value.trim();
+const user=document.getElementById("custUser").value.trim();
+const login=document.getElementById("loginMethod").value;
+if(!name||!user||!login){alert("Field wajib belum diisi");return;}
+
+const ticket="#"+user.replace("@","")+Math.floor(100+Math.random()*900)+"WTP"+new Date().toISOString().slice(0,10).replace(/-/g,"");
+
+const {price}=totals();
+const total=price+handlingFee();
+
+await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+chat_id:CHAT_ID,
+text:`${ticket}\nNama:${name}\nUsername:@${user}\nLogin:${login}\nTotal:${rupiah(total)}`
+})
+});
+
+document.getElementById("ticketArea").style.display="block";
+document.getElementById("ticketCode").innerText=ticket;
+document.getElementById("ticketTemplate").innerText=`Halo, aku mau order yaa. Ini tiketnya : ${ticket}. Untuk pembayarannya aku mau via QRIS.`;
+navigator.clipboard.writeText(document.getElementById("ticketTemplate").innerText);
+};
+
+document.getElementById("copyBtn").onclick=()=>{
+navigator.clipboard.writeText(document.getElementById("ticketTemplate").innerText);
+};
+
+Object.keys(CATALOG).forEach(cat=>{
+const t=document.createElement("button");
+t.className="tab";
+t.innerText=cat;
+t.onclick=()=>{activeTab=cat;render()}
+document.getElementById("tabs").appendChild(t);
+});
+
+render();
 </script>
 </body>
 </html>

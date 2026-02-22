@@ -300,7 +300,7 @@
             <button class="btn btn-primary" id="selAdd" type="button">Tambah ke Keranjang</button>
           </div>
 
-          <div class="muted" id="selHint">Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.</div>
+          <div class="muted" id="selHint">Masukkan jumlah pembelian, lalu klik “Tambah ke Keranjang”.</div>
         </div>
       </div>
     </section>
@@ -398,8 +398,8 @@
   const MIN_TOTAL_PRICE_WHEN_FARMING = 3500;
 
   // Timber pricing (UPDATED)
-  const TIMBER_RATE = 35;          // Rp35 / Timber
-  const QUALITY_TIMBER_RATE = 40;  // Rp40 / Quality Timber
+  const TIMBER_RATE = 35;        
+  const QUALITY_TIMBER_RATE = 35;
 
   const CATALOG = {
     Fruits: [
@@ -645,7 +645,7 @@
       selQtyEl.value = 0;
       minusStepBtn.textContent = "-1";
       plusStepBtn.textContent = "+1";
-      selHintEl.textContent = "Masukkan jumlah pack (1,2,3...), lalu klik “Tambah ke Keranjang”.";
+      selHintEl.textContent = "Masukkan jumlah pack, lalu klik “Tambah ke Keranjang”.";
     } else if (item.kind === "quest_daily"){
       selTitleEl.textContent = item.label;
       selSubEl.textContent = `${rupiah(item.qUnit)}/quest • ${rupiah(item.qPackPrice)}/5 quest`;
@@ -673,7 +673,7 @@
       selQtyEl.value = 0;
       minusStepBtn.textContent = "-5";
       plusStepBtn.textContent = "+5";
-      selHintEl.textContent = "Masukkan qty (kelipatan 5), lalu klik “Tambah ke Keranjang”.";
+      selHintEl.textContent = "Masukkan jumlah, lalu klik “Tambah ke Keranjang”.";
     }
 
     selectorEl.style.display = "grid";
@@ -772,7 +772,7 @@
     if (entries.length === 0){
       const empty = document.createElement("div");
       empty.className = "muted";
-      empty.textContent = "Keranjang masih kosong. Pilih item dari sebelah kiri.";
+      empty.textContent = "Keranjang masih kosong. Silahkan pilih item terlebih dahulu.";
       cartEl.appendChild(empty);
       clearBtn.style.display = "none";
     } else {

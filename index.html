@@ -232,28 +232,28 @@
     .modal-accept .desc{color:var(--muted);font-size:12px;margin-top:2px}
 
     /* FIX: rapihin layout item di keranjang (jaga kolom kanan tidak melebar) */
-.cart-item{
-  grid-template-columns: 1fr 160px; /* kolom kanan fixed */
-  align-items: start;
-}
+    .cart-item{
+      grid-template-columns: 1fr 160px; /* kolom kanan fixed */
+      align-items: start;
+    }
 
-.cart-item .right{
-  justify-content: flex-end;
-}
+    .cart-item .right{
+      justify-content: flex-end;
+    }
 
-.cart-item .right input[type="number"]{
-  width: 72px;        /* lebar input qty */
-  max-width: 72px;
-  padding: 10px 10px; /* biar tetap enak */
-}
+    .cart-item .right input[type="number"]{
+      width: 72px;        /* lebar input qty */
+      max-width: 72px;
+      padding: 10px 10px; /* biar tetap enak */
+    }
 
-/* biar teks kiri nggak “maksa” melebar aneh */
-.cart-item .meta{
-  min-width: 0;
-}
-.cart-item .meta .small{
-  word-break: break-word;
-}
+    /* biar teks kiri nggak “maksa” melebar aneh */
+    .cart-item .meta{
+      min-width: 0;
+    }
+    .cart-item .meta .small{
+      word-break: break-word;
+    }
   </style>
 </head>
 
@@ -397,6 +397,10 @@
   const MIN_TOTAL_QTY = 100;
   const MIN_TOTAL_PRICE_WHEN_FARMING = 3500;
 
+  // Timber pricing (UPDATED)
+  const TIMBER_RATE = 35;          // Rp35 / Timber
+  const QUALITY_TIMBER_RATE = 40;  // Rp40 / Quality Timber
+
   const CATALOG = {
     Fruits: [
       { id:"blueberry", label:"🫐 Blueberry", unit:30, kind:"unit", group:"farming" },
@@ -415,11 +419,11 @@
       { id:"ore",   label:"⛏️ Ore",   unit:28, kind:"unit", group:"farming" },
     ],
     "Timber Package": [
-      { id:"timberA", label:"🪵 Timber Pack A", kind:"pack", rate:37, pack:{ timber:200, qtimber:30 }, packPrice:7500,  group:"timber" },
-      { id:"timberB", label:"🪵 Timber Pack B", kind:"pack", rate:37, pack:{ timber:300, qtimber:60 }, packPrice:11000, group:"timber" },
-      { id:"timberC", label:"🪵 Timber Pack C", kind:"pack", rate:37, pack:{ timber:400, qtimber:90 }, packPrice:15000, group:"timber" },
-      { id:"timberD", label:"🪵 Timber Pack D", kind:"pack", rate:37, pack:{ timber:500, qtimber:120 }, packPrice:18500, group:"timber" },
-      { id:"timberE", label:"🪵 Timber Pack E", kind:"pack", rate:37, pack:{ timber:600, qtimber:150 }, packPrice:22000, group:"timber" },
+      { id:"timberA", label:"🪵 Timber Pack A", kind:"pack", rate: TIMBER_RATE, pack:{ timber:200, qtimber:30 },  group:"timber" },
+      { id:"timberB", label:"🪵 Timber Pack B", kind:"pack", rate: TIMBER_RATE, pack:{ timber:300, qtimber:60 },  group:"timber" },
+      { id:"timberC", label:"🪵 Timber Pack C", kind:"pack", rate: TIMBER_RATE, pack:{ timber:400, qtimber:90 },  group:"timber" },
+      { id:"timberD", label:"🪵 Timber Pack D", kind:"pack", rate: TIMBER_RATE, pack:{ timber:500, qtimber:120 }, group:"timber" },
+      { id:"timberE", label:"🪵 Timber Pack E", kind:"pack", rate: TIMBER_RATE, pack:{ timber:600, qtimber:150 }, group:"timber" },
     ],
     "JOKI-QUEST / STORY": [
       { id:"dq", label:"🗓️ Daily Quest", kind:"quest_daily", qUnit:3000, qPackSize:5, qPackPrice:14000, group:"quest" },
@@ -471,8 +475,13 @@
   }
 
   function isFarming(it){ return it.group === "farming"; }
-  function isTimber(it){ return it.group === "timber"; }
   function isQuest(it){ return it.group === "quest"; }
+
+  function timberPackUnitPrice(it){
+    const timber = it.pack?.timber || 0;
+    const qtimber = it.pack?.qtimber || 0;
+    return (timber * TIMBER_RATE) + (qtimber * QUALITY_TIMBER_RATE);
+  }
 
   function questDailySubtotal(it){
     const q = it.qty;
@@ -482,7 +491,7 @@
   }
 
   function itemSubtotal(it){
-    if (it.kind === "pack") return it.qty * it.packPrice;
+    if (it.kind === "pack") return it.qty * timberPackUnitPrice(it);
     if (it.kind === "quest_daily") return questDailySubtotal(it);
     if (it.kind === "quest") return it.qty * it.unit;
     return it.qty * it.unit;
@@ -570,13 +579,14 @@
       if (it.kind === "pack"){
         const timber = it.pack?.timber || 0;
         const qtimber = it.pack?.qtimber || 0;
+        const packPrice = timberPackUnitPrice(it);
         btn.innerHTML = `
           <div>
             <div class="iname">${it.label}</div>
             <div class="muted">${timber} Timber 🪵 + ${qtimber} Quality Timber 🌳</div>
           </div>
           <div class="iprice">
-            <div class="u">${rupiah(it.packPrice)}/pack</div>
+            <div class="u">${rupiah(packPrice)}/pack</div>
             <div class="h">Rate: ${rupiah(it.rate)}/Timber</div>
           </div>
         `;
@@ -627,8 +637,9 @@
     if (item.kind === "pack"){
       const timber = item.pack?.timber || 0;
       const qtimber = item.pack?.qtimber || 0;
+      const packPrice = timberPackUnitPrice(item);
       selTitleEl.textContent = item.label;
-      selSubEl.textContent = `${timber} Timber 🪵 + ${qtimber} Quality Timber 🌳 • ${rupiah(item.packPrice)}/pack • Rate ${rupiah(item.rate)}/Timber`;
+      selSubEl.textContent = `${timber} Timber 🪵 + ${qtimber} Quality Timber 🌳 • ${rupiah(packPrice)}/pack • Rate ${rupiah(item.rate)}/Timber`;
       selQtyEl.min = 0;
       selQtyEl.step = 1;
       selQtyEl.value = 0;
@@ -701,9 +712,8 @@
     const farmingEntries = Object.values(cart).filter(isFarming);
     const farmingQty = farmingEntries.reduce((a,b)=>a + (b.qty || 0), 0);
     const hasFarming = farmingEntries.length > 0;
-    const hasFruitsOrMush = farmingEntries.some(it => (it.id !== "stone" && it.id !== "ore") && it.group==="farming");
     const hasOnlyMaterials = hasFarming && farmingEntries.every(it => it.id === "stone" || it.id === "ore");
-    return { farmingEntries, farmingQty, hasFarming, hasFruitsOrMush, hasOnlyMaterials };
+    return { farmingEntries, farmingQty, hasFarming, hasOnlyMaterials };
   }
 
   function validateRules(){
